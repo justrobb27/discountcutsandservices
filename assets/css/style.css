@@ -5,6 +5,22 @@
 * License: https://bootstrapmade.com/license/
 */
 
+/* Bootstrap 5 Compatibility Overrides */
+:root {
+  --bs-primary: #74B533; /* Your green accent */
+  --bs-success: #01582B; /* Your dark green */
+}
+
+/* Fix any old spacing if needed */
+.nav-menu > ul > li { padding: 14px 0 14px 1rem; } /* Was 28px—adjust if layout shifts */
+
+/* Hero background – ensure cover works */
+#hero {
+  background: url("../img/hero-bg.png") top center;
+  background-size: cover;
+  background-position: center;
+}
+
 /*--------------------------------------------------------------
 # General
 --------------------------------------------------------------*/
