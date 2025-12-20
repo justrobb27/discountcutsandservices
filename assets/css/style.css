@@ -1981,3 +1981,27 @@ section {
   color: #fff;
   text-decoration: none;
 }
+
+/* Portfolio Swiper Styles */
+.portfolio-swiper {
+  height: 250px;  /* Fixed height for consistency */
+  overflow: hidden;
+  border-radius: 8px;  /* Soft corners */
+}
+
+.portfolio-swiper .swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;  /* Crops to fill without distortion */
+  transition: opacity 0.8s ease;  /* Enhances fade */
+}
+
+.portfolio-info {
+  position: relative;  /* Ensures overlay if needed */
+  margin-top: 10px;
+}
+
+/* Hover pause visual cue */
+.portfolio-item:hover .swiper-pagination-bullet-active {
+  background: var(--bs-primary);  /* Your green */
+}
