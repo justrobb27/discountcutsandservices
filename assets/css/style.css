@@ -2005,3 +2005,53 @@ section {
 .portfolio-item:hover .swiper-pagination-bullet-active {
   background: var(--bs-primary);  /* Your green */
 }
+
+/* Modern Nav Menu Styles */
+.nav-menu ul li a,
+.navbar-nav .nav-link {
+  font-size: 1rem; /* Increased from default ~14px for better readability */
+  font-weight: 500; /* Subtle boldness for clarity without heaviness */
+  position: relative;
+  transition: color 0.3s ease, font-weight 0.3s ease; /* Smooth bold transition */
+}
+
+.nav-menu ul li a:hover,
+.navbar-nav .nav-link:hover {
+  color: #28a745; /* Green accent on hover */
+  font-weight: 700; /* Bold on hover for emphasis */
+}
+
+.nav-menu ul li.active a,
+.navbar-nav .nav-link.active {
+  color: #28a745; /* Green accent on active */
+  font-weight: 700; /* Bold on active (when scrolled into section) */
+}
+
+.nav-menu ul li a::after,
+.navbar-nav .nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #28a745;
+  transition: width 0.3s ease;
+}
+
+.nav-menu ul li a:hover::after,
+.navbar-nav .nav-link:hover::after {
+  width: 100%; /* Smooth underline on hover */
+}
+
+.nav-menu ul li.active a::after,
+.navbar-nav .nav-link.active::after {
+  width: 100%; /* Underline on active (when scrolled into section) */
+}
+
+/* Mobile-specific tweaks for dropdown */
+@media (max-width: 991.98px) {
+  .navbar-nav .nav-link {
+    padding: 0.75rem 1rem; /* Extra touch target for fingers */
+  }
+}
