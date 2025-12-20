@@ -62,86 +62,47 @@
 <body>
 
   <!-- ======= Header ======= -->
-
-  <header id="header" class="fixed-top">
-  	<div class="row">
-    <div class="container d-flex align-items-center">
-      <div class= "col-lg-3 align-items-left">
-      <!--<h1 class="logo me-auto"><a href="index.html">OnePage</a></h1>-->
-      <!-- Uncomment below if you prefer to use an image logo -->
-        <a href="index.html" class="logo me-auto"><img src="assets/img/logo-xs.png" alt="" class="img-fluid"></a>
-      </div>
-
-
-
-
-    <div class= "col-lg-6 align-items-center">
-
-
-
-      <nav class="nav-menu d-none d-lg-block">
-        <ul>
-          <li class="active"><a href="index.html">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#services">Services</a></li>
-          <li><a href="#portfolio">Portfolio</a></li>
-          <li><a href="#reviews"></a>Reviews</a></li>
-          <!--<li class="drop-down"><a href="">Drop Down</a>
-            <ul>
-              <li><a href="#">Drop Down 1</a></li>
-              <li class="drop-down"><a href="#">Deep Drop Down</a>
-                <ul>
-                  <li><a href="#">Deep Drop Down 1</a></li>
-                  <li><a href="#">Deep Drop Down 2</a></li>
-                  <li><a href="#">Deep Drop Down 3</a></li>
-                  <li><a href="#">Deep Drop Down 4</a></li>
-                  <li><a href="#">Deep Drop Down 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Drop Down 2</a></li>
-              <li><a href="#">Drop Down 3</a></li>
-              <li><a href="#">Drop Down 4</a></li>
-            </ul>
-          </li>
-          <li><a href="#faq">FAQ</a></li>-->
-          <li><a href="#contact">Contact</a></li>
-
-        </ul>
-      </nav>
+<header id="header" class="fixed-top">
+  <div class="container-fluid d-flex align-items-center justify-content-between px-3 px-md-5">
+    <!-- Logo -->
+    <div class="col-auto">
+      <a href="index.html" class="logo me-auto"><img src="assets/img/logo-xs.png" alt="" class="img-fluid"></a>
     </div>
 
-    <!-- .nav-menu -->
-    <div class= "col-lg-3 align-items-right">
-      <a href="hiring.html" class="get-started-btn scrollto">Now Hiring</a>
-      <!--<div class= "col-lg-3 align-items-right">
-        <div class="social-links text-center text-md-right pt-3 pt-md-0">
-          <span>&nbsp; &nbsp;
-              		<a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-          				<h4><a href="https://g.page/discountcutsandservices?gm" target= "_blank" class="google"><i class="bx bxl-google"></i></a>
-          			<a href="https://www.facebook.com/Discountcutsandservices/" target="_blank" class="facebook"><i class="bx bxl-facebook"></i></a>
-          			<a href="https://www.yelp.com/biz/discount-cuts-and-services-dallas?osq=discount+cuts+and+services"target=_"blank" class="yelp"><i class="bx bxl-yelp"></i></a>
-          			<a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a></h4></span>
-        		</div>
+    <!-- Desktop Nav -->
+<nav class="nav-menu d-none d-lg-block mx-auto">
+  <ul>
+    <li class="active"><a href="index.html">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-      		</div>-->
-    	</div>
-	</div>
+    <!-- Hiring Button & Mobile Toggle -->
+    <div class="d-flex align-items-center col-auto">
+      <a href="hiring.html" class="get-started-btn scrollto d-none d-lg-inline">Now Hiring</a>
+      <!-- Mobile Nav Toggle -->
+      <i class="bi bi-list mobile-nav-toggle d-lg-none text-dark fs-3 ms-3" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"></i>
+    </div>
 
-
-    <div class= "row">
-    	<div class="container d-flex align-items-center">
-   			<div class= "col-lg-12 align-items-center">
-    			<!--<h4><a href="https://g.page/discountcutsandservices?gm" target= "_blank" class="google"><i class="bx bxl-google"></i></a>
-          		<a href="https://www.facebook.com/Discountcutsandservices/" target= "_blank" class="facebook"><i class="bx bxl-facebook"></i></a>
-          		<a href="https://www.yelp.com/biz/discount-cuts-and-services-dallas?osq=discount+cuts+and+services" target= "_blank" class="yelp"><i class="bx bxl-yelp"></i></a>
-          		<a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a> </h4>-->
-    		</div>
-
-		</div>
-	</div>
-  </header>
-
-  <!-- End Header -->
+    <!-- Mobile Nav Collapse (Hidden on Desktop) -->
+    <nav class="navbar navbar-light bg-light collapse d-lg-none mt-2" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+  <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+  <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+  <li class="nav-item"><a class="nav-link" href="#services">Services</a></li>
+  <li class="nav-item"><a class="nav-link" href="#portfolio">Portfolio</a></li>
+  <li class="nav-item"><a class="nav-link" href="#testimonials">Reviews</a></li>
+  <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+  <li class="nav-item"><a class="nav-link" href="hiring.html">Now Hiring</a></li>
+</ul>
+    </nav>
+  </div>
+</header>
+<!-- End Header -->
 
   <!-- ======= Hero Section ======= -->
 <section id="hero" class="d-flex align-items-center">
