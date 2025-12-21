@@ -1983,28 +1983,89 @@ section {
   text-decoration: none;
 }
 
-/* Portfolio Swiper Styles */
-.portfolio-swiper {
-  height: 250px;  /* Fixed height for consistency */
+/* Fixed Portfolio: Even Rows, Full Images, No Overlap/Bleeding */
+#portfolio {
+  margin-bottom: 5rem !important; /* Space before testimonials—no bleeding */
+}
+
+.portfolio-container {
+  display: flex !important; /* Flexbox override for even rows; tames Isotope masonry */
+  flex-wrap: wrap !important;
+  justify-content: flex-start !important; /* Left-aligns for Bootstrap cols */
+  gap: 1.5rem !important; /* Consistent spacing between items */
+}
+
+.portfolio-item {
+  flex: 0 0 calc(33.333% - 1rem) !important; /* 3-col even on lg; adjust gap */
+  max-width: calc(33.333% - 1rem) !important; /* Matches Bootstrap col-lg-4 */
+  margin-bottom: 0 !important; /* Remove old margin for flex control */
+}
+
+.portfolio-wrap {
+  height: 300px !important; /* Uniform wrapper height—no variable stacking */
   overflow: hidden;
-  border-radius: 8px;  /* Soft corners */
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.portfolio-swiper {
+  height: 100% !important; /* Fills wrapper fully */
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
 .portfolio-swiper .swiper-slide img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;  /* Crops to fill without distortion */
-  transition: opacity 0.8s ease;  /* Enhances fade */
+  width: 100% !important;
+  height: 100% !important; /* Fills fixed height */
+  object-fit: contain !important; /* Full image visible, no cropping */
+  object-position: center !important; /* Centers content */
+  transition: opacity 0.8s ease;
+  display: block !important;
 }
 
-.portfolio-info {
-  position: relative;  /* Ensures overlay if needed */
-  margin-top: 10px;
+/* Hover effects (kept from original) */
+.portfolio-wrap:hover::before {
+  content: "";
+  background: rgba(45, 71, 20, 0.6);
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  opacity: 1;
+  transition: all ease-in-out 0.3s;
 }
 
-/* Hover pause visual cue */
-.portfolio-item:hover .swiper-pagination-bullet-active {
-  background: var(--bs-primary);  /* Your green */
+.portfolio-wrap:hover .portfolio-info {
+  opacity: 1;
+  z-index: 3;
+}
+
+.portfolio-wrap:hover .portfolio-swiper .swiper-slide img {
+  transform: scale(1.05); /* Gentle zoom */
+}
+
+/* Mobile: Single column, shorter height */
+@media (max-width: 991px) {
+  .portfolio-item {
+    flex: 0 0 calc(50% - 0.75rem) !important; /* 2-col on md */
+    max-width: calc(50% - 0.75rem) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .portfolio-item {
+    flex: 0 0 100% !important; /* 1-col on sm */
+    max-width: 100% !important;
+  }
+  .portfolio-wrap,
+  .portfolio-swiper {
+    height: 250px !important; /* Shorter for mobile */
+  }
 }
 
 /* Modern Nav Menu Styles */
@@ -2154,4 +2215,52 @@ section {
 /* Optional: Hover zoom for engagement */
 .portfolio-swiper:hover .swiper-slide img {
   transform: scale(1.05); /* Gentle zoom on hover */
+}
+
+/* Hero-Style Background for Testimonials */
+.testimonials {
+  background: url("../img/hero-bg.png") top center;
+  background-size: cover;
+  background-position: center;
+  position: relative; /* Enables overlay */
+}
+
+.testimonials::before {
+  content: "";
+  background: rgba(255, 255, 255, 0.85); /* Slightly stronger overlay than hero for quote legibility */
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.testimonials .container {
+  position: relative;
+  z-index: 2; /* Lifts cards above overlay */
+}
+
+/* Ensure quote cards stay crisp */
+.testimonials .testimonial-item {
+  background: rgba(255, 255, 255, 0.95) !important; /* Extra opacity if needed */
+}
+
+/* Transparent Testimonial Cards */
+.testimonials .testimonial-item {
+  background: transparent !important; /* Lets overlay/image show through */
+  border: none !important; /* Removes any outline for clean blend */
+  box-shadow: none !important; /* Drops shadows to avoid clashing with bg */
+}
+
+/* Keep text crisp on textured bg */
+.testimonials .testimonial-item p {
+  color: #2d4714 !important; /* Dark green for contrast; swap to #333 if lighter needed */
+  font-style: italic; /* Preserves quote feel */
+}
+
+/* Optional: Subtle inner glow if cards feel too flat */
+.testimonials .testimonial-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important; /* Faint white on hover for depth */
+  backdrop-filter: blur(5px); /* Modern blur effect; fallback gracefully */
 }
