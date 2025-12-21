@@ -492,6 +492,7 @@ h1, h2, h3, h4, h5, h6 {
   color: #666666;
   margin: 10px 0 0 0;
   font-size: 22px;
+  font-weight: 700
 }
 
 #hero .btn-get-started {
@@ -2054,4 +2055,57 @@ section {
   .navbar-nav .nav-link {
     padding: 0.75rem 1rem; /* Extra touch target for fingers */
   }
+}
+
+/* Heading-Style Descriptions */
+.description-head {
+  font-size: 1.125rem !important; /* 18px—bigger than p, but not h3-big */
+  font-weight: 400 !important; /* Normal weight, para-like */
+  line-height: 1.6 !important;
+  margin-bottom: 1rem !important;
+  color: #74B533 !important;
+}
+
+/* Fallback for body <p> tags */
+.about .col-lg-6 p,
+.services .icon-box p,
+.testimonials .testimonial-item p {
+  font-size: 1rem !important; /* 16px fallback */
+  line-height: 1.6 !important;
+  margin-bottom: 1rem !important;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .description-head {
+    font-size: 1rem;
+  }
+  .about .col-lg-6 p,
+  .services .icon-box p,
+  .testimonials .testimonial-item p {
+    font-size: 0.95rem;
+  }
+}
+
+/* Oval "Now Hiring" Button */
+.get-started-btn {
+  background-color: #28a745 !important; /* Core green background */
+  color: white !important; /* White text for contrast */
+  padding: 0.75rem 2rem !important; /* Taller/wider for pill shape */
+  border-radius: 25px !important; /* Soft oval curve */
+  font-weight: 600 !important; /* Bold for emphasis */
+  text-decoration: none !important;
+  transition: all 0.3s ease !important; /* Smooth interactions */
+  border: none !important; /* Clean edges */
+  display: inline-block !important;
+}
+
+.get-started-btn:hover {
+  background-color: #218838 !important; /* Darker green on hover */
+  transform: translateY(-1px) !important; /* Subtle lift */
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3) !important; /* Light shadow for depth */
+}
+
+.get-started-btn:active {
+  transform: translateY(0) !important; /* Press feedback */
 }
