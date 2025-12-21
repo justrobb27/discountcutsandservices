@@ -2133,3 +2133,25 @@ section {
   position: relative;
   z-index: 2; /* Lifts content above overlay */
 }
+
+/* Full Image Display in Portfolio Sliders */
+.portfolio-swiper {
+  height: auto !important; /* Flexible height to fit full image */
+  max-height: 400px; /* Cap for very tall images; adjust as needed */
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.portfolio-swiper .swiper-slide img {
+  width: 100% !important;
+  height: auto !important; /* Natural height for full view */
+  object-fit: contain !important; /* Shows entire image without cropping */
+  transition: opacity 0.8s ease;
+  display: block; /* Ensures no inline spacing issues */
+}
+
+/* Optional: Hover zoom for engagement */
+.portfolio-swiper:hover .swiper-slide img {
+  transform: scale(1.05); /* Gentle zoom on hover */
+}
