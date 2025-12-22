@@ -606,6 +606,12 @@
                 <div class="sent-message">Your message has been sent. Thank you!</div>
               </div>
               <div class="text-center"><button type="submit">Send Message</button></div>
+
+
+              <div class="cf-turnstile" data-sitekey="0x4AAAAAACID5h3NWjzX-h1X" data-theme="light" data-callback="onTurnstileSuccess"></div>
+     
+</div>
+<input type="hidden" name="cf-turnstile-response" id="cf-turnstile-response">
             </form>
 
           </div>
@@ -748,6 +754,10 @@
 
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  function onTurnstileSuccess(token) {
+  document.getElementById('cf-turnstile-response').value = token;
+}
 
 </body>
 
