@@ -777,13 +777,50 @@
 </script>
 <script>
 const video = document.querySelector('video');
-video.addEventListener('click', function() {
-    if (this.muted) {
-        this.muted = false;
-        this.play();  // Ensure it restarts if needed
-    }
+let isMuted = true;  // Start muted (matches HTML)
+let isPlaying = false;  // Starts paused for policy compliance
+
+// Create overlay for visual feedback (optional but recommended)
+const overlay = document.createElement('div');
+overlay.style.cssText = `
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 3rem; color: white; text-shadow: 0 0 5px rgba(0,0,0,0.5);
+  pointer-events: none; opacity: 0; transition: opacity 0.3s;
+  z-index: 10;
+`;
+video.parentElement.style.position = 'relative';  // Ensure container is relative
+video.parentElement.appendChild(overlay);
+
+// Update icon based on state
+function updateIcon() {
+  const muteIcon = isMuted ? '🔇' : '🔊';
+  const playIcon = isPlaying ? '⏸️' : '▶️';
+  overlay.textContent = `${muteIcon} ${playIcon}`;
+}
+
+// Toggle on click
+video.addEventListener('click', function(e) {
+  e.preventDefault();  // Prevent any link clicks if overlaid
+  isMuted = !isMuted;
+  this.muted = isMuted;
+  
+  if (isPlaying) {
+    this.pause();
+    isPlaying = false;
+  } else {
+    this.play().catch(e => console.log('Play blocked:', e));  // Graceful if policy blocks
+    isPlaying = true;
+  }
+  
+  updateIcon();
 });
-// Optional: Add a visual cue, like overlay text: "Click to unmute"
+
+// Show icon on hover
+video.addEventListener('mouseenter', () => { overlay.style.opacity = '1'; updateIcon(); });
+video.addEventListener('mouseleave', () => { overlay.style.opacity = '0'; });
+
+// Initial setup (unmute/play on first click as before)
+updateIcon();
 </script>
 
 </body>
