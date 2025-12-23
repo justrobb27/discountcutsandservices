@@ -775,6 +775,16 @@
     document.getElementById('cf-turnstile-response').value = token;
   }
 </script>
+<script>
+const video = document.querySelector('video');
+video.addEventListener('click', function() {
+    if (this.muted) {
+        this.muted = false;
+        this.play();  // Ensure it restarts if needed
+    }
+});
+// Optional: Add a visual cue, like overlay text: "Click to unmute"
+</script>
 
 </body>
 
