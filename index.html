@@ -7,7 +7,13 @@
 
   <title>Affordable Landscaping & Home Services in South Fulton, Fairburn, Union City & More | Discount Cuts</title>
   <meta name="description" content="Professional, affordable landscaping, mowing, pressure washing & painting in South Fulton, Chattahoochee Hills, Fairburn, Union City, Southwest Atlanta, Paulding, Cobb, Villa Rica & Douglasville, GA. Licensed & insured. Free estimates!">
-  <meta content="" name="keywords" content="landscaping South Fulton GA, lawn mowing Fairburn, pressure washing Union City, junk removal Chattahoochee Hills, affordable home services Southwest Atlanta, landscaping Paulding GA, lawn mowing Cobb County, pressure washing Douglasville, junk removal Villa Rica, affordable home services Georgia">
+  <meta name="keywords" content="landscaping South Fulton GA, lawn mowing Fairburn, pressure washing Union City, junk removal Chattahoochee Hills, affordable home services Southwest Atlanta, landscaping Paulding GA, lawn mowing Cobb County, pressure washing Douglasville, junk removal Villa Rica, affordable home services Georgia">
+  <meta property="og:title" content="Affordable Landscaping & Home Services in South Fulton, GA | Discount Cuts">
+  <meta property="og:description" content="Professional, affordable landscaping...">
+  <meta property="og:image" content="https://www.discountcutsandservices.com/assets/img/logo-sm.png">
+  <meta property="og:url" content="https://www.discountcutsandservices.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="canonical" href="https://www.discountcutsandservices.com/">
 
   <script type="application/ld+json">
 {
@@ -65,8 +71,15 @@
 
   <!-- Swiper JS -->
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script src="assets/vendor/aos/aos.js"></script>
+  <script src="assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+  <script src="assets/vendor/venobox/venobox.min.js"></script>
+  <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>  <!-- For portfolio filters -->
+  <script src="assets/js/main.js"></script>  <!-- Template init: AOS.init(), Owl init, etc. -->
 
   <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <link rel="preload" href="assets/video/hero-540.mp4" as="video">
 
 </head>
 
@@ -77,7 +90,7 @@
   <div class="container-fluid d-flex align-items-center justify-content-between px-3 px-md-5">
     <!-- Logo -->
     <div class="col-auto">
-      <a href="index.html" class="logo me-auto"><img src="assets/img/logo-xs.png" alt="" class="img-fluid"></a>
+      <a href="index.html" class="logo me-auto"><img src="assets/img/logo-xs.png" alt="Discount Cuts & Services logo" class="img-fluid"></a>
     </div>
 
     <!-- Desktop Nav -->
@@ -132,7 +145,9 @@
     <!-- New Hero Video Row -->
     <div class="row justify-content-center mt-3">
       <div class="col-auto text-center">
-        <video class="img-fluid" src="assets/video/hero-540.mp4" autoplay muted loop playsinline style="max-width: 475px; display: block; margin: 0 auto;"></video>
+    <!-- Added 'hero-video' class; removed style="" -->
+      <video class="img-fluid hero-video" src="assets/video/hero-540.mp4" autoplay muted loop playsinline>
+    </video>
       </div>
     </div>
 
@@ -188,7 +203,7 @@
           
             <img src="assets/img/mower.png" alt="Lawn mower icon for professional mowing services">
           
-          <h4><a href="">Lawn Care</a></h4>
+          <h4>Lawn Care</h4>
           <p>Regular lawn maintenance is the key to keeping any landscape looking its best.  We provide top-notch mowing, trimming and edging services.  We make your yard the envy of the block and keep your yard looking great all season long.</p>
         </div>
       </div>
@@ -198,7 +213,7 @@
           
             <img src="assets/img/hoa.png" alt="HOA maintenance icon for community common areas">
           
-          <h4><a href="">HOA Common Area Maintenance</a></h4>
+          <h4>HOA Common Area Maintenance</h4>
           <p>We have affordable plans to keep your HOA or condo association entrances and common areas immaculate and inviting.</p>
         </div>
       </div>
@@ -208,7 +223,7 @@
           
             <img src="assets/img/hedge.png" alt="Hedging and landscaping icon for tree and shrub trimming">
           
-          <h4><a href="">Landscaping</a></h4>
+          <h4>Landscaping</h4>
           <p>From building new flower beds and gardens to keeping your trees and shrubs trimmed and clean, we're at your service.</p>
         </div>
       </div>
@@ -218,7 +233,7 @@
           
             <img src="assets/img/pressure.png" alt="Pressure washing icon for driveway and siding cleaning">
           
-          <h4><a href="">Pressure Washing</a></h4>
+          <h4>Pressure Washing</h4>
           <p>Don't hire any old guy with a couple of hundred dollars for a pressure washer to blow holes in your siding or blast the wood off your deck.  We are licensed and insured professionals and we want your continued business.</p>
         </div>
       </div>
@@ -228,7 +243,7 @@
           
             <img src="assets/img/paint.png" alt="Painting brush icon for interior and exterior home painting">
           
-          <h4><a href="">Professional Painting</a></h4>
+          <h4>Professional Painting</h4>
           <p>We provide great interior and exterior painting and staining services at a very affordable price.  Do you need a fresh coat of paint?  Do you need that deck or fence maintained and sealed?  We're your guys! Also, ask us about move-in/move-out maintenance.</p>
         </div>
       </div>
@@ -238,7 +253,7 @@
           
             <img src="assets/img/junk.png" alt="Junk removal truck icon for seasonal yard cleanup">
           
-          <h4><a href="">Seasonal Cleaning</a></h4>
+          <h4>Seasonal Cleaning</h4>
           <p>We can get rid of those pesky leaves, freshen up your mulch or haul that rotting playground equipment away to keep your yard safe and clean.  We haul junk of all types.  Need to dump an old refrigerator or sofa?  Contact us.</p>
         </div>
       </div>
@@ -653,7 +668,7 @@
         <div class="row">
 
           <div class="col-lg-5 col-md-6 footer-contact">
-            <a href="index.html" class="logo me-auto"><img src="assets/img/logo-xs.png" alt="" class="img-fluid"></a><br>
+            <a href="index.html" class="logo me-auto"><img src="assets/img/logo-xs.png" alt="Discount Cuts & Services logo" class="img-fluid"></a><br>
             <br><p>
               Proudly serving South Fulton, Chattahoochee Hills, Fairburn, <br>
               Union City, Southwest Atlanta & More<br>
