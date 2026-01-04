@@ -2126,6 +2126,7 @@ section {
 #apply-form.show {
   display: block !important;
   opacity: 1;
+<<<<<<< HEAD
 }
 
 #apply-form .form-header {
@@ -2199,4 +2200,6 @@ section {
   transform: translateY(-1px);
 =======
 >>>>>>> parent of 7b92ca2 (Close form functionality in hiring page)
+=======
+>>>>>>> parent of d2c9357 (style addition)
 }
