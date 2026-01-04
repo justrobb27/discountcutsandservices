@@ -2117,24 +2117,13 @@ section {
 
 /* Consolidated #apply-form Styling (Hide, Reveal, Button, Overlap Fix) */
 #apply-form {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.6s ease, margin-top 0.3s ease;
-  margin-top: 3rem !important;  /* Overall section push-down */
-  padding-top: 2rem !important;  /* Section internal buffer */
-}
-#apply-form.show {
-  display: block !important;
-  opacity: 1;
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
+  margin-top: 3rem !important;  /* Push form down */
+  padding-top: 2rem !important;  /* Internal breathing room */
 }
 
-#apply-form .form-header {
-  min-height: 6.5rem;  /* Reserves ample space for button + h2 (prevents p squeeze) */
-  padding-top: 1.5rem !important;  /* Header internal buffer */
-  position: relative;  /* Ensures button anchors here (overrides any global) */
+/* Bonus: Ensure card doesn't expand oddly */
+.job-listing .card {
+  margin-bottom: 1rem;  /* Ground the card itself */
 }
 
 #apply-form p {  /* Specific buffer for intro text */
@@ -2155,35 +2144,4 @@ section {
   color: #fff !important;
   border-color: #74B533 !important;
   transform: translateY(-1px);
-}
-
-/* Submit Button Gradient (Consistent with Apply Now) */
-.application-form .btn-success {
-  background: linear-gradient(to top, #01582B, #74B533) !important;
-  border-color: #74B533 !important;
-  color: #fff !important;
-  transition: all 0.3s ease;
-}
-
-.application-form .btn-success:hover {
-  background: linear-gradient(to bottom, #01582B, #74B533) !important;
-  color: #fff !important;
-  transform: translateY(-1px);
-<<<<<<< HEAD
-}
-
-/* Mobile: Stack button below title */
-@media (max-width: 576px) {
-  #apply-form .btn-close {
-    position: static !important;
-    margin: 0 auto 1rem auto !important;
-    display: block;
-    width: fit-content;
-  }
-  #apply-form .form-header {
-    min-height: auto !important;
-  }
-  #apply-form p {
-    margin-top: 1rem !important;
-  }
 }
