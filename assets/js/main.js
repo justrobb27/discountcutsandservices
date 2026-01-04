@@ -229,3 +229,28 @@
   });
 
 })(jQuery);
+
+// Reveal form on "Apply Now" click with smooth scroll (reusable for hiring pages)
+document.addEventListener('DOMContentLoaded', function() {
+  const applyButtons = document.querySelectorAll('a[href="#apply-form"]');  // Targets all relevant buttons
+  const formSection = document.getElementById('apply-form');
+  
+  if (!formSection) return;  // Early exit if no form on this page (safe for other pages)
+  
+  applyButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();  // Stop default anchor jump
+      formSection.style.display = 'block';  // Ensure layout space (unhides if plain CSS)
+      formSection.classList.add('show');    // Trigger fade-in if opacity CSS is present
+      formSection.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start'  // Aligns to top of section
+      });  
+      // Auto-focus the first field for better UX
+      setTimeout(() => {
+        const nameField = document.getElementById('full_name');
+        if (nameField) nameField.focus();
+      }, 300);  // Tiny delay for scroll/fade to settle
+    });
+  });
+});

@@ -2109,3 +2109,33 @@ section {
 .job-listing .bi-check-circle-fill {
   color: #74B533 !important;
 }
+
+/* Fix Overlap Between Job Card and Form */
+#open-positions {
+  margin-bottom: 3rem !important;  /* Extra space below job section */
+}
+
+#apply-form {
+  margin-top: 3rem !important;  /* Push form down */
+  padding-top: 2rem !important;  /* Internal breathing room */
+}
+
+/* Bonus: Ensure card doesn't expand oddly */
+.job-listing .card {
+  margin-bottom: 1rem;  /* Ground the card itself */
+}
+
+/* Hide form until Apply Now is clicked */
+#apply-form {
+  display: none;
+}
+
+#apply-form {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+#apply-form.show {
+  display: block;
+  opacity: 1;
+}
