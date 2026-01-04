@@ -2114,34 +2114,3 @@ section {
 #open-positions {
   margin-bottom: 3rem !important;  /* Extra space below job section */
 }
-
-/* Consolidated #apply-form Styling (Hide, Reveal, Button, Overlap Fix) */
-#apply-form {
-  margin-top: 3rem !important;  /* Push form down */
-  padding-top: 2rem !important;  /* Internal breathing room */
-}
-
-/* Bonus: Ensure card doesn't expand oddly */
-.job-listing .card {
-  margin-bottom: 1rem;  /* Ground the card itself */
-}
-
-#apply-form p {  /* Specific buffer for intro text */
-  margin-top: 1.5rem !important;  /* Pushes p down below header fully */
-  margin-bottom: 2rem !important;  /* Extra bottom space before form fields */
-}
-
-#apply-form .btn-close {
-  top: 1rem !important;  /* Higher anchor (centers button above h2, no p overlap) */
-  right: 1rem !important;
-  z-index: 10 !important;  /* Layers above everything */
-  font-size: 0.875rem;
-  transition: all 0.3s ease;
-}
-
-#apply-form .btn-close:hover {
-  background: linear-gradient(to top, #01582B, #74B533) !important;
-  color: #fff !important;
-  border-color: #74B533 !important;
-  transform: translateY(-1px);
-}
