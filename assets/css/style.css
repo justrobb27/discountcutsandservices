@@ -2166,3 +2166,27 @@ section {
   border-color: #74B533 !important;
   transform: translateY(-1px);
 }
+
+/* Refined Close Button for Mobile/Desktop */
+#apply-form .btn-close {
+  z-index: 10;  /* Stays on top */
+  transition: all 0.3s ease;
+  font-size: 0.875rem;  /* Slightly smaller text */
+}
+
+#apply-form .btn-close:hover {
+  background: linear-gradient(to top, #01582B, #74B533) !important;
+  color: #fff !important;
+  border-color: #74B533 !important;
+  transform: translateY(-1px);
+}
+
+/* Mobile: Stack button below title if screen tiny */
+@media (max-width: 576px) {
+  #apply-form .btn-close {
+    position: static !important;  /* Pulls it inline */
+    margin: 0 auto 1rem;
+    display: block;
+    width: fit-content;
+  }
+}

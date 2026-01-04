@@ -193,18 +193,22 @@
       </div>
     </section>
 
-    <!-- Application Form Section -->
-<section id="apply-form" class="application-form py-5 bg-light mt-5 pt-4">  <!-- Added mt-5 pt-4 -->
+        <!-- Application Form Section (Hidden Initially) -->
+<section id="apply-form" class="application-form py-5 bg-light mt-5 pt-4">
+  <div class="position-relative">  <!-- Wrapper for absolute positioning -->
+    <h2 class="text-center mb-4 pt-3">Apply for Lawncare Technician</h2>  <!-- Added pt-3 for button space -->
+    
+    <!-- Close Button (top-right, now with better clearance) -->
+    <button type="button" class="btn btn-outline-secondary btn-sm position-absolute end-0 top-0 mt-3 me-3 btn-close" onclick="hideForm()">
+      <i class="bi bi-x"></i> Close  <!-- Swapped to bi-x for smaller icon -->
+    </button>
+    
+    <!-- Intro Text (no shift needed now) -->
+    <p class="text-center text-muted mb-4">Fill out the form below—we'll review and get back to you within 48 hours. Questions? Call 678-907-1925.</p>
+  </div>
+  
   <div class="row justify-content-center">
     <div class="col-lg-8">
-      <h2 class="text-center mb-4">Apply for Landscaping Technician</h2>
-      <!-- Close Button (top-right) -->
-<button type="button" class="btn btn-outline-secondary btn-sm position-absolute end-0 top-0 mt-2 me-3 btn-close" onclick="hideForm()">
-  <i class="bi bi-x-lg"></i> Close
-</button>
-
-<!-- Shift the intro p left to avoid overlap -->
-<p class="text-center text-muted mb-4 ms-5">Fill out the form below—we'll review and get back to you within 48 hours. Questions? Call 678-907-1925.</p>
       <form action="forms/employment_application.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
         <!-- Honeypot (hidden spam trap) -->
         <div style="position: absolute; left: -9999px;">
@@ -234,7 +238,7 @@
           <label for="position" class="form-label">Position Applying For <span class="text-danger">*</span></label>
           <select class="form-select" id="position" name="position" required>
             <option value="">Select a position...</option>
-            <option value="landscaping_technician">Landscaping Technician</option>
+            <option value="lawncare_technician">Lawncare Technician</option>
             <option value="licensed_barber">Licensed Barber</option>
             <option value="front_desk">Front Desk/Admin</option>
           </select>
@@ -249,7 +253,7 @@
         
         <div class="mb-3">
           <label for="resume" class="form-label">Upload Resume <span class="text-muted">(PDF, DOC, DOCX - Max 5MB)</span></label>
-          <input type="file" class="form-control" id="resume" name="resume" accept=".pdf,.doc,.docx" data-max-size="5242880">
+          <input type="file" class="form-control" id="resume" name="resume" accept=".pdf,.doc,.docx">
           <div class="invalid-feedback">Please upload a valid file under 5MB.</div>
         </div>
         
