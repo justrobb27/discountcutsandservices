@@ -2190,3 +2190,15 @@ section {
     width: fit-content;
   }
 }
+
+/* Form Header Clearance for Close Button */
+#apply-form .form-header {
+  min-height: 4rem;  /* Reserves space for button + title */
+  padding-top: 1rem !important;
+}
+
+#apply-form .btn-close {
+  top: 0.5rem !important;
+  right: 1rem !important;
+  z-index: 10;
+}
