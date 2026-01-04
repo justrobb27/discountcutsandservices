@@ -25,6 +25,7 @@
 # General
 --------------------------------------------------------------*/
 body {
+  padding-top: 90px;
   font-family: "Open Sans", sans-serif;
   color: #01582B;
 }
@@ -476,7 +477,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 #hero .container {
-  padding-top: 80px;
+  padding-top: 1px;
 }
 
 #hero h1 {
