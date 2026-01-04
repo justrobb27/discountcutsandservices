@@ -2115,104 +2115,34 @@ section {
   margin-bottom: 3rem !important;  /* Extra space below job section */
 }
 
-#apply-form {
-  margin-top: 3rem !important;  /* Push form down */
-  padding-top: 2rem !important;  /* Internal breathing room */
-}
-
-/* Bonus: Ensure card doesn't expand oddly */
-.job-listing .card {
-  margin-bottom: 1rem;  /* Ground the card itself */
-}
-
-/* Hide form until Apply Now is clicked */
-#apply-form {
-  display: none;
-}
-
+/* Consolidated #apply-form Styling (Hide, Reveal, Button, Overlap Fix) */
 #apply-form {
   display: none;
   opacity: 0;
-  transition: opacity 0.6s ease;
+  transition: opacity 0.6s ease, margin-top 0.3s ease;
+  margin-top: 3rem !important;  /* Overall section push-down */
+  padding-top: 2rem !important;  /* Section internal buffer */
 }
 #apply-form.show {
-  display: block;
-  opacity: 1;
-}
-
-/* Gradient Buttons for Application Form (Matching Apply Now) */
-.application-form .btn-success {
-  background: linear-gradient(to top, #01582B, #74B533) !important;
-  border-color: #74B533 !important;
-  color: #fff !important;
-  transition: all 0.3s ease;
-}
-
-.application-form .btn-success:hover {
-  background: linear-gradient(to bottom, #01582B, #74B533) !important;
-  color: #fff !important;
-  transform: translateY(-1px);  /* Matches the lift effect */
-}
-
-/* Close Button Styling for Application Form */
-#apply-form .btn-close {
-  z-index: 1;  /* Ensures it floats above form elements */
-  transition: all 0.3s ease;
-}
-
-#apply-form .btn-close:hover {
-  background: linear-gradient(to top, #01582B, #74B533) !important;  /* Gradient fill on hover */
-  color: #fff !important;
-  border-color: #74B533 !important;
-  transform: translateY(-1px);
-}
-
-/* Refined Close Button for Mobile/Desktop */
-#apply-form .btn-close {
-  z-index: 10;  /* Stays on top */
-  transition: all 0.3s ease;
-  font-size: 0.875rem;  /* Slightly smaller text */
-}
-
-#apply-form .btn-close:hover {
-  background: linear-gradient(to top, #01582B, #74B533) !important;
-  color: #fff !important;
-  border-color: #74B533 !important;
-  transform: translateY(-1px);
-}
-
-/* Mobile: Stack button below title if screen tiny */
-@media (max-width: 576px) {
-  #apply-form .btn-close {
-    position: static !important;  /* Pulls it inline */
-    margin: 0 auto 1rem;
-    display: block;
-    width: fit-content;
-  }
-}
-
-/* Unified Form Header & Close Button Styling (Fixes Overlap) */
-#apply-form {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  margin-top: 3rem !important;
-  padding-top: 2rem !important;
-}
-#apply-form.show {
-  display: block;
+  display: block !important;
   opacity: 1;
 }
 
 #apply-form .form-header {
-  min-height: 6rem;  /* Taller reserve: covers padding + button + h2 without clip */
-  padding-top: 1.5rem !important;  /* Internal buffer for title */
+  min-height: 6.5rem;  /* Reserves ample space for button + h2 (prevents p squeeze) */
+  padding-top: 1.5rem !important;  /* Header internal buffer */
+  position: relative;  /* Ensures button anchors here (overrides any global) */
+}
+
+#apply-form p {  /* Specific buffer for intro text */
+  margin-top: 1.5rem !important;  /* Pushes p down below header fully */
+  margin-bottom: 2rem !important;  /* Extra bottom space before form fields */
 }
 
 #apply-form .btn-close {
-  top: 1.5rem !important;  /* Higher start position (overrides low top, centers button above h2) */
+  top: 1rem !important;  /* Higher anchor (centers button above h2, no p overlap) */
   right: 1rem !important;
-  z-index: 10;
+  z-index: 10 !important;  /* Layers above everything */
   font-size: 0.875rem;
   transition: all 0.3s ease;
 }
@@ -2224,16 +2154,33 @@ section {
   transform: translateY(-1px);
 }
 
+/* Submit Button Gradient (Consistent with Apply Now) */
+.application-form .btn-success {
+  background: linear-gradient(to top, #01582B, #74B533) !important;
+  border-color: #74B533 !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+
+.application-form .btn-success:hover {
+  background: linear-gradient(to bottom, #01582B, #74B533) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
 /* Mobile: Stack button below title */
 @media (max-width: 576px) {
   #apply-form .btn-close {
     position: static !important;
-    margin: 0 auto 1rem auto;
+    margin: 0 auto 1rem auto !important;
     display: block;
     width: fit-content;
   }
   #apply-form .form-header {
-    min-height: auto;
+    min-height: auto !important;
+  }
+  #apply-form p {
+    margin-top: 1rem !important;
   }
 }
 
