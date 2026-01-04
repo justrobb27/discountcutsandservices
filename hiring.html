@@ -189,6 +189,7 @@
         </div>
       </section>
 
+<<<<<<< HEAD
       <!-- Application Form Section (Hidden Initially) -->
       <section id="apply-form" class="application-form py-5 bg-light mt-5 pt-4">
         <div class="position-relative">
@@ -204,6 +205,24 @@
           
           <!-- Intro Text (full center, no shift) -->
           <p class="text-center text-muted mb-4">Fill out the form below—we'll review and get back to you within 48 hours. Questions? Call 678-907-1925.</p>
+=======
+    <!-- Application Form Section -->
+<section id="apply-form" class="application-form py-5 bg-light mt-5 pt-4">  <!-- Added mt-5 pt-4 -->
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <h2 class="text-center mb-4">Apply for Landscaping Technician</h2>
+      <!-- Close Button (top-right) -->
+<button type="button" class="btn btn-outline-secondary btn-sm position-absolute end-0 top-0 mt-2 me-3 btn-close" onclick="hideForm()">
+  <i class="bi bi-x-lg"></i> Close
+</button>
+
+<!-- Shift the intro p left to avoid overlap -->
+<p class="text-center text-muted mb-4 ms-5">Fill out the form below—we'll review and get back to you within 48 hours. Questions? Call 678-907-1925.</p>
+      <form action="forms/employment_application.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <!-- Honeypot (hidden spam trap) -->
+        <div style="position: absolute; left: -9999px;">
+          <input type="text" name="honeypot" tabindex="-1" value="">
+>>>>>>> parent of 7b92ca2 (Close form functionality in hiring page)
         </div>
         
         <div class="row justify-content-center">
@@ -268,7 +287,50 @@
             </form>
           </div>
         </div>
+<<<<<<< HEAD
       </section>
+=======
+        
+        <div class="mb-3">
+          <label for="phone" class="form-label">Phone Number</label>
+          <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+          <div class="form-text">Format: 123-456-7890 (optional but recommended).</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="position" class="form-label">Position Applying For <span class="text-danger">*</span></label>
+          <select class="form-select" id="position" name="position" required>
+            <option value="">Select a position...</option>
+            <option value="landscaping_technician">Landscaping Technician</option>
+            <option value="licensed_barber">Licensed Barber</option>
+            <option value="front_desk">Front Desk/Admin</option>
+          </select>
+          <div class="invalid-feedback">Please select a position.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="experience" class="form-label">Years of Relevant Experience</label>
+          <input type="number" class="form-control" id="experience" name="experience" min="0" max="50" value="0">
+          <div class="form-text">e.g., 2 for two years (optional).</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="resume" class="form-label">Upload Resume <span class="text-muted">(PDF, DOC, DOCX - Max 5MB)</span></label>
+          <input type="file" class="form-control" id="resume" name="resume" accept=".pdf,.doc,.docx" data-max-size="5242880">
+          <div class="invalid-feedback">Please upload a valid file under 5MB.</div>
+        </div>
+        
+        <div class="mb-3">
+          <label for="cover_letter" class="form-label">Cover Letter or Why Us? <span class="text-muted">(Optional)</span></label>
+          <textarea class="form-control" id="cover_letter" name="cover_letter" rows="4" maxlength="1000" placeholder="Tell us about your skills and why you'd be a great fit for Discount Cuts & Services!"></textarea>
+          <div class="form-text">Up to 1000 characters.</div>
+        </div>
+        
+        <div class="d-grid">
+          <button type="submit" class="btn btn-success btn-lg">Submit Application</button>
+        </div>
+      </form>
+>>>>>>> parent of 7b92ca2 (Close form functionality in hiring page)
     </div>
   </main><!-- End Main -->
 

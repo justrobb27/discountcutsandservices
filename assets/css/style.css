@@ -2166,6 +2166,7 @@ section {
   background: linear-gradient(to bottom, #01582B, #74B533) !important;
   color: #fff !important;
   transform: translateY(-1px);
+<<<<<<< HEAD
 }
 
 /* Mobile: Stack button below title */
@@ -2196,4 +2197,6 @@ section {
   background: linear-gradient(to bottom, #01582B, #74B533) !important;
   color: #fff !important;
   transform: translateY(-1px);
+=======
+>>>>>>> parent of 7b92ca2 (Close form functionality in hiring page)
 }
