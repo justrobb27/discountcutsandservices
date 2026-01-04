@@ -198,7 +198,13 @@
   <div class="row justify-content-center">
     <div class="col-lg-8">
       <h2 class="text-center mb-4">Apply for Landscaping Technician</h2>
-      <p class="text-center text-muted mb-4">Fill out the form below— we'll review and get back to you within 48 hours. Questions? Call 678-907-1925.</p>
+      <!-- Close Button (top-right) -->
+<button type="button" class="btn btn-outline-secondary btn-sm position-absolute end-0 top-0 mt-2 me-3 btn-close" onclick="hideForm()">
+  <i class="bi bi-x-lg"></i> Close
+</button>
+
+<!-- Shift the intro p left to avoid overlap -->
+<p class="text-center text-muted mb-4 ms-5">Fill out the form below—we'll review and get back to you within 48 hours. Questions? Call 678-907-1925.</p>
       <form action="forms/employment_application.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
         <!-- Honeypot (hidden spam trap) -->
         <div style="position: absolute; left: -9999px;">

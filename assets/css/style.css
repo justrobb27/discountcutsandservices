@@ -2153,3 +2153,16 @@ section {
   color: #fff !important;
   transform: translateY(-1px);  /* Matches the lift effect */
 }
+
+/* Close Button Styling for Application Form */
+#apply-form .btn-close {
+  z-index: 1;  /* Ensures it floats above form elements */
+  transition: all 0.3s ease;
+}
+
+#apply-form .btn-close:hover {
+  background: linear-gradient(to top, #01582B, #74B533) !important;  /* Gradient fill on hover */
+  color: #fff !important;
+  border-color: #74B533 !important;
+  transform: translateY(-1px);
+}

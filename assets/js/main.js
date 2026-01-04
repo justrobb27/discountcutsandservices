@@ -254,3 +254,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+// Close form functionality (reusable)
+function hideForm() {
+  const formSection = document.getElementById('apply-form');
+  if (!formSection) return;
+  
+  formSection.style.display = 'none';  // Hide immediately
+  formSection.classList.remove('show');  // Reset fade class if present
+  
+  // Scroll back to job section smoothly
+  const jobSection = document.getElementById('open-positions');
+  if (jobSection) {
+    jobSection.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    });
+  }
+}
