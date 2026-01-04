@@ -2139,3 +2139,17 @@ section {
   display: block;
   opacity: 1;
 }
+
+/* Gradient Buttons for Application Form (Matching Apply Now) */
+.application-form .btn-success {
+  background: linear-gradient(to top, #01582B, #74B533) !important;
+  border-color: #74B533 !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+
+.application-form .btn-success:hover {
+  background: linear-gradient(to bottom, #01582B, #74B533) !important;
+  color: #fff !important;
+  transform: translateY(-1px);  /* Matches the lift effect */
+}
