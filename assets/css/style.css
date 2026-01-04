@@ -2191,14 +2191,62 @@ section {
   }
 }
 
-/* Form Header Clearance for Close Button */
+/* Unified Form Header & Close Button Styling (Fixes Overlap) */
+#apply-form {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  margin-top: 3rem !important;
+  padding-top: 2rem !important;
+}
+#apply-form.show {
+  display: block;
+  opacity: 1;
+}
+
 #apply-form .form-header {
-  min-height: 4rem;  /* Reserves space for button + title */
-  padding-top: 1rem !important;
+  min-height: 6rem;  /* Taller reserve: covers padding + button + h2 without clip */
+  padding-top: 1.5rem !important;  /* Internal buffer for title */
 }
 
 #apply-form .btn-close {
-  top: 0.5rem !important;
+  top: 1.5rem !important;  /* Higher start position (overrides low top, centers button above h2) */
   right: 1rem !important;
   z-index: 10;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+}
+
+#apply-form .btn-close:hover {
+  background: linear-gradient(to top, #01582B, #74B533) !important;
+  color: #fff !important;
+  border-color: #74B533 !important;
+  transform: translateY(-1px);
+}
+
+/* Mobile: Stack button below title */
+@media (max-width: 576px) {
+  #apply-form .btn-close {
+    position: static !important;
+    margin: 0 auto 1rem auto;
+    display: block;
+    width: fit-content;
+  }
+  #apply-form .form-header {
+    min-height: auto;
+  }
+}
+
+/* Submit Button Gradient (Unchanged, for completeness) */
+.application-form .btn-success {
+  background: linear-gradient(to top, #01582B, #74B533) !important;
+  border-color: #74B533 !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+
+.application-form .btn-success:hover {
+  background: linear-gradient(to bottom, #01582B, #74B533) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
 }
