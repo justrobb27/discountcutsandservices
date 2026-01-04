@@ -2057,3 +2057,55 @@ section {
   background: rgba(255, 255, 255, 0.1) !important; /* Faint white on hover for depth */
   backdrop-filter: blur(5px); /* Modern blur effect; fallback gracefully */
 }
+
+/* Custom Job Card Colors */
+.job-listing .card-header {
+  background-color: #74B533 !important;  /* Darker green instead of default success */
+  border-color: #166534;
+}
+
+.job-listing .text-primary {
+  color: #74B533 !important;  /* Keep Bootstrap blue, or swap to #20c997 (teal) */
+}
+
+.job-listing .bi-check-circle-fill {
+  color: #198754 !important;  /* Muted green for checkmarks */
+}
+
+/* Hover effect bonus */
+.job-listing .card:hover {
+  box-shadow: 0 0.5rem 1rem rgba(22, 101, 52, 0.15) !important;  /* Subtle green-tinted shadow */
+}
+
+/* Gradient Buttons for Job Listing (Matching Social Links) */
+.job-listing .btn-success {
+  background: linear-gradient(to top, #01582B, #74B533) !important;
+  border-color: #74B533 !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+
+.job-listing .btn-success:hover {
+  background: linear-gradient(to bottom, #01582B, #74B533) !important;
+  color: #fff !important;
+  transform: translateY(-1px);  /* Subtle lift for engagement */
+}
+
+.job-listing .btn-outline-success {
+  border: 2px solid transparent !important;
+  background: linear-gradient(white, white) padding-box, linear-gradient(to top, #01582B, #74B533) border-box !important;
+  color: #01582B !important;
+  transition: all 0.3s ease;
+}
+
+.job-listing .btn-outline-success:hover {
+  background: linear-gradient(to top, #01582B, #74B533) !important;
+  border-color: #74B533 !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* Custom Checkmark Color for Job Listing */
+.job-listing .bi-check-circle-fill {
+  color: #74B533 !important;
+}
