@@ -192,15 +192,15 @@
       <!-- Application Form Section (Hidden Initially) -->
       <section id="apply-form" class="application-form py-5 bg-light mt-5 pt-4">
         <div class="position-relative">
-          <!-- Dedicated Header for Title + Close (with extra padding) -->
-          <div class="form-header text-center mb-4 pt-4">  <!-- pt-4 for ample top room -->
-            <h2 class="mb-0">Apply for Lawncare Technician</h2>  <!-- Inline mb-0, no extra -->
-            
-            <!-- Close Button (nudged higher and right) -->
-            <button type="button" class="btn btn-outline-secondary btn-sm position-absolute end-0 top-0 mt-4 me-3 btn-close" onclick="hideForm()">
-              <i class="bi bi-x"></i> Close
-            </button>
-          </div>
+          <!-- Dedicated Header for Title + Close (with relative positioning here) -->
+<div class="form-header text-center mb-4 pt-4 position-relative">  <!-- Moved position-relative here -->
+  <h2 class="mb-0">Apply for Lawncare Technician</h2>
+  
+  <!-- Close Button (extra top buffer) -->
+  <button type="button" class="btn btn-outline-secondary btn-sm position-absolute end-0 top-0 mt-5 me-3 btn-close" onclick="hideForm()">  <!-- mt-5 for more space -->
+    <i class="bi bi-x"></i> Close
+  </button>
+</div>
           
           <!-- Intro Text (full center, no shift) -->
           <p class="text-center text-muted mb-4">Fill out the form below—we'll review and get back to you within 48 hours. Questions? Call 678-907-1925.</p>
