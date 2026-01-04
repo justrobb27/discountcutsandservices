@@ -2114,3 +2114,29 @@ section {
 #open-positions {
   margin-bottom: 3rem !important;  /* Extra space below job section */
 }
+
+/* Gradient for Submit Button (Matches Apply Now) */
+.application-form .btn-success {
+  background: linear-gradient(to top, #01582B, #74B533) !important;
+  border-color: #74B533 !important;
+  color: #fff !important;
+  transition: all 0.3s ease;
+}
+
+.application-form .btn-success:hover {
+  background: linear-gradient(to bottom, #01582B, #74B533) !important;
+  color: #fff !important;
+  transform: translateY(-1px);  /* Subtle lift on hover */
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1) !important;  /* Light shadow for pop */
+}
+
+/* Hide Application Form Initially (Reveal on Click) */
+#apply-form {
+  display: none !important;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#apply-form.show {
+  display: block !important;
+  opacity: 1;
+}
