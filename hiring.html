@@ -199,63 +199,161 @@
         <div class="row justify-content-center">
           <div class="col-lg-8">
             <form action="forms/employment_application.php" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
-              <!-- Honeypot (hidden spam trap) -->
-              <div style="position: absolute; left: -9999px;">
-                <input type="text" name="honeypot" tabindex="-1" value="">
-              </div>
-              
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
-                  <input type="text" class="form-control" id="full_name" name="full_name" required minlength="2">
-                  <div class="invalid-feedback">Please enter your full name (at least 2 characters).</div>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
-                  <input type="email" class="form-control" id="email" name="email" required>
-                  <div class="invalid-feedback">Please provide a valid email.</div>
-                </div>
-              </div>
-              
-              <div class="mb-3">
-                <label for="phone" class="form-label">Phone Number</label>
-                <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
-                <div class="form-text">Format: 123-456-7890 (optional but recommended).</div>
-              </div>
-              
-              <div class="mb-3">
-                <label for="position" class="form-label">Position Applying For <span class="text-danger">*</span></label>
-                <select class="form-select" id="position" name="position" required>
-                  <option value="">Select a position...</option>
-                  <option value="lawncare_technician">Lawncare Technician</option>
-                  <option value="licensed_barber">Licensed Barber</option>
-                  <option value="front_desk">Front Desk/Admin</option>
-                </select>
-                <div class="invalid-feedback">Please select a position.</div>
-              </div>
-              
-              <div class="mb-3">
-                <label for="experience" class="form-label">Years of Relevant Experience</label>
-                <input type="number" class="form-control" id="experience" name="experience" min="0" max="50" value="0">
-                <div class="form-text">e.g., 2 for two years (optional).</div>
-              </div>
-              
-              <div class="mb-3">
-                <label for="resume" class="form-label">Upload Resume <span class="text-muted">(PDF, DOC, DOCX - Max 5MB)</span></label>
-                <input type="file" class="form-control" id="resume" name="resume" accept=".pdf,.doc,.docx" data-max-size="5242880">
-                <div class="invalid-feedback">Please upload a valid file under 5MB.</div>
-              </div>
-              
-              <div class="mb-3">
-                <label for="cover_letter" class="form-label">Cover Letter or Why Us? <span class="text-muted">(Optional)</span></label>
-                <textarea class="form-control" id="cover_letter" name="cover_letter" rows="4" maxlength="1000" placeholder="Tell us about your skills and why you'd be a great fit for Discount Cuts & Services!"></textarea>
-                <div class="form-text">Up to 1000 characters.</div>
-              </div>
-              
-              <div class="d-grid">
-                <button type="submit" class="btn btn-success btn-lg">Submit Application</button>
-              </div>
-            </form>
+  <!-- Honeypot (hidden spam trap) -->
+  <div style="position: absolute; left: -9999px;">
+    <input type="text" name="honeypot" tabindex="-1" value="">
+  </div>
+  
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label for="full_name" class="form-label">Full Name <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="full_name" name="full_name" required minlength="2">
+      <div class="invalid-feedback">Please enter your full name (at least 2 characters).</div>
+    </div>
+    <div class="col-md-6 mb-3">
+      <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+      <input type="email" class="form-control" id="email" name="email" required>
+      <div class="invalid-feedback">Please provide a valid email.</div>
+    </div>
+  </div>
+  
+  <div class="mb-3">
+    <label for="phone" class="form-label">Phone Number</label>
+    <input type="tel" class="form-control" id="phone" name="phone" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}">
+    <div class="form-text">Format: 123-456-7890 (optional but recommended).</div>
+  </div>
+  
+  <div class="mb-3">
+    <label for="street_address" class="form-label">Street Address <span class="text-danger">*</span></label>
+    <input type="text" class="form-control" id="street_address" name="street_address" required minlength="5">
+    <div class="invalid-feedback">Please enter your street address (at least 5 characters).</div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-5 mb-3">
+      <label for="city" class="form-label">City <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="city" name="city" required minlength="2">
+      <div class="invalid-feedback">Please enter your city (at least 2 characters).</div>
+    </div>
+    <div class="col-md-3 mb-3">
+      <label for="state" class="form-label">State <span class="text-danger">*</span></label>
+      <select class="form-select" id="state" name="state" required>
+        <option value="">Select State</option>
+        <option value="AL">AL - Alabama</option>
+        <option value="AK">AK - Alaska</option>
+        <option value="AZ">AZ - Arizona</option>
+        <option value="AR">AR - Arkansas</option>
+        <option value="CA">CA - California</option>
+        <option value="CO">CO - Colorado</option>
+        <option value="CT">CT - Connecticut</option>
+        <option value="DE">DE - Delaware</option>
+        <option value="FL">FL - Florida</option>
+        <option value="GA" selected>GA - Georgia</option>
+        <option value="HI">HI - Hawaii</option>
+        <option value="ID">ID - Idaho</option>
+        <option value="IL">IL - Illinois</option>
+        <option value="IN">IN - Indiana</option>
+        <option value="IA">IA - Iowa</option>
+        <option value="KS">KS - Kansas</option>
+        <option value="KY">KY - Kentucky</option>
+        <option value="LA">LA - Louisiana</option>
+        <option value="ME">ME - Maine</option>
+        <option value="MD">MD - Maryland</option>
+        <option value="MA">MA - Massachusetts</option>
+        <option value="MI">MI - Michigan</option>
+        <option value="MN">MN - Minnesota</option>
+        <option value="MS">MS - Mississippi</option>
+        <option value="MO">MO - Missouri</option>
+        <option value="MT">MT - Montana</option>
+        <option value="NE">NE - Nebraska</option>
+        <option value="NV">NV - Nevada</option>
+        <option value="NH">NH - New Hampshire</option>
+        <option value="NJ">NJ - New Jersey</option>
+        <option value="NM">NM - New Mexico</option>
+        <option value="NY">NY - New York</option>
+        <option value="NC">NC - North Carolina</option>
+        <option value="ND">ND - North Dakota</option>
+        <option value="OH">OH - Ohio</option>
+        <option value="OK">OK - Oklahoma</option>
+        <option value="OR">OR - Oregon</option>
+        <option value="PA">PA - Pennsylvania</option>
+        <option value="RI">RI - Rhode Island</option>
+        <option value="SC">SC - South Carolina</option>
+        <option value="SD">SD - South Dakota</option>
+        <option value="TN">TN - Tennessee</option>
+        <option value="TX">TX - Texas</option>
+        <option value="UT">UT - Utah</option>
+        <option value="VT">VT - Vermont</option>
+        <option value="VA">VA - Virginia</option>
+        <option value="WA">WA - Washington</option>
+        <option value="WV">WV - West Virginia</option>
+        <option value="WI">WI - Wisconsin</option>
+        <option value="WY">WY - Wyoming</option>
+      </select>
+      <div class="invalid-feedback">Please select your state.</div>
+    </div>
+    <div class="col-md-4 mb-3">
+      <label for="zip_code" class="form-label">ZIP Code <span class="text-danger">*</span></label>
+      <input type="text" class="form-control" id="zip_code" name="zip_code" required pattern="[0-9]{5}" maxlength="5">
+      <div class="invalid-feedback">Please enter a valid 5-digit ZIP code.</div>
+    </div>
+  </div>
+  
+  <div class="mb-3">
+    <label for="experience" class="form-label">Years of Relevant Experience</label>
+    <input type="number" class="form-control" id="experience" name="experience" min="0" max="50" value="0">
+    <div class="form-text">e.g., 2 for two years (optional).</div>
+  </div>
+  
+  <div class="mb-3">
+    <label for="desired_pay" class="form-label">Desired Pay (Hourly Rate) <span class="text-danger">*</span></label>
+    <input type="number" class="form-control" id="desired_pay" name="desired_pay" required min="0" max="100" step="0.01" placeholder="$0.00">
+    <div class="form-text">e.g., 11.00 for $11/hour.</div>
+    <div class="invalid-feedback">Please enter your desired hourly rate.</div>
+  </div>
+  
+  <div class="mb-3">
+    <label class="form-label">Do you have a valid Driver's License? <span class="text-danger">*</span></label>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="drivers_license" id="drivers_license_yes" value="yes" required>
+      <label class="form-check-label" for="drivers_license_yes">Yes</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="drivers_license" id="drivers_license_no" value="no" required>
+      <label class="form-check-label" for="drivers_license_no">No</label>
+    </div>
+    <div class="invalid-feedback d-block">Please select Yes or No.</div>
+  </div>
+  
+  <div class="mb-3">
+    <label class="form-label">Do you have reliable transportation? <span class="text-danger">*</span></label>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="reliable_transportation" id="reliable_transportation_yes" value="yes" required>
+      <label class="form-check-label" for="reliable_transportation_yes">Yes</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="reliable_transportation" id="reliable_transportation_no" value="no" required>
+      <label class="form-check-label" for="reliable_transportation_no">No</label>
+    </div>
+    <div class="invalid-feedback d-block">Please select Yes or No.</div>
+  </div>
+  
+  <div class="mb-3">
+    <label for="resume" class="form-label">Upload Resume <span class="text-muted">(PDF, DOC, DOCX - Max 5MB)</span></label>
+    <input type="file" class="form-control" id="resume" name="resume" accept=".pdf,.doc,.docx" data-max-size="5242880">
+    <div class="invalid-feedback">Please upload a valid file under 5MB.</div>
+  </div>
+  
+  <div class="mb-3">
+    <label for="cover_letter" class="form-label">Cover Letter or Why Us? <span class="text-muted">(Optional)</span></label>
+    <textarea class="form-control" id="cover_letter" name="cover_letter" rows="4" maxlength="1000" placeholder="Tell us about your skills and why you'd be a great fit for Discount Cuts & Services!"></textarea>
+    <div class="form-text">Up to 1000 characters.</div>
+  </div>
+  
+  <div class="d-grid">
+    <button type="submit" class="btn btn-success btn-lg">Submit Application</button>
+  </div>
+</form>
           </div>
         </div>
       </section>
@@ -318,5 +416,59 @@
       }
     });
   </script>
+
+  <!-- Google Places Autocomplete API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initAutocomplete" defer></script>
+
+<script>
+function initAutocomplete() {
+  // Get form fields
+  const streetInput = document.getElementById('street_address');
+  const cityInput = document.getElementById('city');
+  const stateSelect = document.getElementById('state');
+  const zipInput = document.getElementById('zip_code');
+
+  // Autocomplete options: US addresses only, address type
+  const options = {
+    types: ['address'],
+    componentRestrictions: { country: 'us' }
+  };
+
+  // Create autocomplete instance on street address input
+  const autocomplete = new google.maps.places.Autocomplete(streetInput, options);
+
+  // Listen for place selection
+  autocomplete.addListener('place_changed', () => {
+    const place = autocomplete.getPlace();
+
+    if (!place.geometry || !place.address_components) {
+      // Optional: Show alert or clear fields
+      return;
+    }
+
+    // Clear existing values
+    cityInput.value = '';
+    stateSelect.value = '';
+    zipInput.value = '';
+
+    // Extract and populate address components
+    place.address_components.forEach(component => {
+      const types = component.types;
+      if (types.includes('locality')) {
+        cityInput.value = component.long_name;  // e.g., "Atlanta"
+      } else if (types.includes('administrative_area_level_1')) {
+        stateSelect.value = component.short_name;  // e.g., "GA" (selects dropdown option)
+      } else if (types.includes('postal_code')) {
+        zipInput.value = component.long_name;  // e.g., "30301"
+      }
+    });
+
+    // Optional: Trigger custom validation or focus next field
+    cityInput.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+}
+
+// Auto-init via callback in API script
+</script>
 </body>
 </html>
