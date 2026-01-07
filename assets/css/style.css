@@ -468,7 +468,7 @@ h1, h2, h3, h4, h5, h6 {
 
 #hero:before {
   content: "";
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.5);
   position: absolute;
   bottom: 0;
   top: 0;
@@ -1974,7 +1974,7 @@ section {
 
 .services::before {
   content: "";
-  background: rgba(255, 255, 255, 0.8); /* Same semi-transparent white overlay as hero for text legibility */
+  background: rgba(255, 255, 255, 0.5); /* Same semi-transparent white overlay as hero for text legibility */
   position: absolute;
   bottom: 0;
   top: 0;
@@ -2020,7 +2020,7 @@ section {
 
 .testimonials::before {
   content: "";
-  background: rgba(255, 255, 255, 0.85); /* Slightly stronger overlay than hero for quote legibility */
+  background: rgba(255, 255, 255, 0.55); /* Slightly stronger overlay than hero for quote legibility */
   position: absolute;
   bottom: 0;
   top: 0;
