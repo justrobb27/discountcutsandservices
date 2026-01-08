@@ -1,2 +1,23 @@
 # Sensitive files
 forms/config.php
+
+# Environment variables (API keys, secrets)
+.env
+.env.local
+.env.*.local
+
+# Build outputs (injected keys stay local)
+dist/
+build/
+
+# Node modules (if using npm for Vite/dotenv)
+node_modules/
+npm-debug.log*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories
+.vscode/
+.idea/
