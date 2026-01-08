@@ -1,0 +1,24 @@
+{
+  "name": "discountcutsandservices",
+  "version": "1.0.0",
+  "description": "Discount Cuts and Services Website",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/justrobb27/discountcutsandservices.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/justrobb27/discountcutsandservices/issues"
+  },
+  "homepage": "https://github.com/justrobb27/discountcutsandservices#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  }
+}
