@@ -1,0 +1,18 @@
+{
+    "name": "robb/discountcutsandservices",
+    "description": "Backend for employment form handling (email, PDF, spam protection)",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robb",
+            "email": "your-email@example.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "phpmailer/phpmailer": "^6.9",
+        "vlucas/phpdotenv": "^5.6",
+        "tecnickcom/tcpdf": "^6.6"
+    }
+}
