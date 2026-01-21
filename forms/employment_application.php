@@ -163,10 +163,38 @@ if (file_exists($fontPath)) {
 }
     $pdf->SetTextColor(0, 0, 0);
 
-    // Import template page (your PDF)
-    $pdf->setSourceFile($pdfTemplate);
-    $tplId = $pdf->importPage(1);
-    $pdf->useTemplate($tplId, 0, 0, 210);  // Full A4 overlay (210mm width)
+    // Import template page (your PDF) - Version-safe
+$tplId = false;
+if (file_exists($pdfTemplate)) {
+    // Log version for debug
+    if ($debug) error_log("TCPDF Version: " . TCPDF_STATIC::getTcpdfVersion());
+    
+    try {
+        // Method 1: Standard (TCPDF 6.x+)
+        if (method_exists($pdf, 'setSourceFile')) {
+            $pdf->setSourceFile($pdfTemplate);
+            $tplId = $pdf->importPage(1);
+        } else {
+            // Method 2: Older/deprecated (pre-6.x)
+            $pdf->SetSourceFile($pdfTemplate);  // Note: Capital S in some old builds
+            $tplId = $pdf->importPage(1);
+        }
+        
+        if ($tplId) {
+            $pdf->useTemplate($tplId, 0, 0, 210);  // Full A4 overlay (210mm width)
+            if ($debug) error_log("Template imported successfully: TplID $tplId");
+        } else {
+            throw new Exception("Failed to import template page");
+        }
+    } catch (Exception $e) {
+        if ($debug) error_log("Template import failed: " . $e->getMessage());
+        // Fallback: No template—plain white page
+        $pdf->AddPage();
+    }
+} else {
+    if ($debug) error_log("PDF template missing: $pdfTemplate");
+    $pdf->AddPage();  // Plain page fallback
+}
 
     // Overlay fields at template coords (mm from top/left; measured from your PDF)
     // Personal info (top, y=30-60)
