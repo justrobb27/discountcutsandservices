@@ -478,27 +478,45 @@
   </script>
 <script>
   function initAutocomplete() {
-    const streetInput = document.getElementById('street_address');
-    
-    if (!streetInput) {
-      console.warn('Street address input not found—autocomplete disabled');
+    // Guard: Ensure DOM is fully loaded
+    if (document.readyState === 'loading') {
+      console.log('DOM loading—deferring autocomplete init');
+      document.addEventListener('DOMContentLoaded', initAutocomplete);
       return;
     }
 
-    if (!window.google || !window.google.maps.places) {
-      console.warn('Google Maps not loaded—autocomplete disabled');
+    const streetInput = document.getElementById('street_address');
+    
+    if (!streetInput) {
+      console.warn('Street address input not found—autocomplete disabled. Check form HTML.');
+      return;
+    }
+
+    // Extra type check (fixes InvalidValueError)
+    if (!(streetInput instanceof HTMLInputElement)) {
+      console.error('Street input is not an HTMLInputElement:', streetInput);
+      return;
+    }
+
+    if (!window.google || !window.google.maps || !window.google.maps.places) {
+      console.warn('Google Maps/Places not fully loaded—retrying in 500ms');
+      setTimeout(initAutocomplete, 500);  // Retry once
       return;
     }
 
     try {
+      console.log('Starting autocomplete init on:', streetInput);  // Debug log
+
       const options = {
         types: ['address'],
         componentRestrictions: { country: 'us' }
       };
 
       const autocomplete = new google.maps.places.Autocomplete(streetInput, options);
+      console.log('Autocomplete created successfully:', autocomplete);  // Confirm object
 
       autocomplete.addListener('place_changed', () => {
+        console.log('Place selection triggered!');  // Debug
         try {
           const place = autocomplete.getPlace();
 
@@ -533,9 +551,8 @@
             }
           }
 
-          // Set street (handles partial inputs too)
+          // Set street (fallback if no components)
           if (place.formatted_address && !street) {
-            // Fallback: Use partial formatted_address if no components
             street = place.formatted_address.split(',')[0];
           }
           streetInput.value = street.trim();
@@ -543,10 +560,10 @@
           // Trigger change events for validation
           ['city', 'state', 'zip'].forEach(id => {
             const el = document.getElementById(id);
-            if (el.value) el.dispatchEvent(new Event('change', { bubbles: true }));
+            if (el && el.value) el.dispatchEvent(new Event('change', { bubbles: true }));
           });
 
-          console.log('Address fields populated:', { street, city: place.address_components.find(c => c.types.includes('locality'))?.long_name });
+          console.log('Address populated:', { street, city: place.address_components.find(c => c.types.includes('locality'))?.long_name, state: document.getElementById('state').value, zip: document.getElementById('zip').value });
         } catch (error) {
           console.error('Error handling place selection:', error);
         }
