@@ -123,84 +123,20 @@ if (file_exists($pdfTemplate)) {
     $pdf->AddPage();
 
     // Register Montserrat font (TTF path—adjust if needed)
-$fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';  // Upload this to /forms/fonts/ if missing
-$customFont = null;
-
-if (file_exists($fontPath)) {
-    // Log TCPDF version for debug
-    if ($debug) error_log("TCPDF Version: " . TCPDF_STATIC::getTcpdfVersion());
-    
-    // Try new method (TCPDF 6.2+)
-    if (method_exists($pdf, 'addTTFFont')) {
-        try {
-            $customFont = $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);
-            if ($debug) error_log("Custom font registered via addTTFFont: $customFont");
-        } catch (Exception $e) {
-            if ($debug) error_log("addTTFFont failed: " . $e->getMessage());
-        }
-    }
-    
-    // Fallback to old/deprecated method (pre-6.2)
-    if (!$customFont && method_exists($pdf, 'addTTFfont')) {
-        try {
-            $customFont = $pdf->addTTFfont($fontPath, 'TrueTypeUnicode', '', 32);
-            if ($debug) error_log("Custom font registered via addTTFfont: $customFont");
-        } catch (Exception $e) {
-            if ($debug) error_log("addTTFfont failed: " . $e->getMessage());
-        }
-    }
-    
-    // Set font if successful
-    if ($customFont) {
-        $pdf->SetFont($customFont, '', 12);
+    $fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';  // Commit this file to /forms/fonts/
+    if (file_exists($fontPath)) {
+        $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);  // Register once
+        $pdf->SetFont('montserrat', '', 12);  // Use Montserrat, size 12
     } else {
-        $pdf->SetFont('helvetica', '', 12);  // Safe fallback
-        if ($debug) error_log("Using Helvetica fallback—no custom font registered");
+        $pdf->SetFont('helvetica', '', 12);  // Fallback
+        if ($debug) error_log("Montserrat font missing: $fontPath");
     }
-} else {
-    $pdf->SetFont('helvetica', '', 12);  // Safe fallback
-    if ($debug) error_log("Montserrat font file missing: $fontPath");
-}
     $pdf->SetTextColor(0, 0, 0);
 
-    // Import template page (your PDF) - Fully version-safe
-$tplId = false;
-if (file_exists($pdfTemplate)) {
-    // Log version for debug
-    if ($debug) error_log("TCPDF Version: " . TCPDF_STATIC::getTcpdfVersion());
-    
-    try {
-        // Method 1: Modern lowercase (TCPDF 6.x+)
-        if (method_exists($pdf, 'setSourceFile')) {
-            $pdf->setSourceFile($pdfTemplate);
-            $tplId = $pdf->importPage(1);
-        } 
-        // Method 2: Older capitalized (5.x)
-        elseif (method_exists($pdf, 'SetSourceFile')) {
-            $pdf->SetSourceFile($pdfTemplate);
-            $tplId = $pdf->importPage(1);
-        }
-        // Method 3: Direct import if source methods missing (fallback for ancient versions)
-        else {
-            // Skip template—use plain page
-            throw new Exception("No source file method available");
-        }
-        
-        if ($tplId) {
-            $pdf->useTemplate($tplId, 0, 0, 210);  // Full A4 overlay
-            if ($debug) error_log("Template imported: TplID $tplId");
-        } else {
-            throw new Exception("Import page failed");
-        }
-    } catch (Exception $e) {
-        if ($debug) error_log("Template import error: " . $e->getMessage());
-        // Fallback: Plain page with no template
-        $pdf->AddPage();
-    }
-} else {
-    if ($debug) error_log("PDF template missing: $pdfTemplate");
-    $pdf->AddPage();  // Plain fallback
-}
+    // Import template page (your PDF)
+    $pdf->setSourceFile($pdfTemplate);
+    $tplId = $pdf->importPage(1);
+    $pdf->useTemplate($tplId, 0, 0, 210);  // Full A4 overlay (210mm width)
 
     // Overlay fields at template coords (mm from top/left; measured from your PDF)
     // Personal info (top, y=30-60)
