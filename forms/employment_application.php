@@ -123,14 +123,14 @@ if (file_exists($pdfTemplate)) {
     $pdf->AddPage();
 
     // Register Montserrat font (TTF path—adjust if needed)
-    $fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';  // Commit this file to /forms/fonts/
-    if (file_exists($fontPath)) {
-        $pdf->addTTFfont($fontPath, 'TrueTypeUnicode', '', 32);  // Register once
-        $pdf->SetFont('montserrat', '', 12);  // Use Montserrat, size 12
-    } else {
-        $pdf->SetFont('helvetica', '', 12);  // Fallback
-        if ($debug) error_log("Montserrat font missing: $fontPath");
-    }
+$fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';  // Commit this file to /forms/fonts/
+if (file_exists($fontPath)) {
+    $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);  // Fixed: Double F
+    $pdf->SetFont('montserrat', '', 12);  // Use Montserrat, size 12
+} else {
+    $pdf->SetFont('helvetica', '', 12);  // Fallback
+    if ($debug) error_log("Montserrat font missing: $fontPath");
+}
     $pdf->SetTextColor(0, 0, 0);
 
     // Import template page (your PDF)
