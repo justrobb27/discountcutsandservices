@@ -123,13 +123,43 @@ if (file_exists($pdfTemplate)) {
     $pdf->AddPage();
 
     // Register Montserrat font (TTF path—adjust if needed)
-$fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';  // Commit this file to /forms/fonts/
+$fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';  // Upload this to /forms/fonts/ if missing
+$customFont = null;
+
 if (file_exists($fontPath)) {
-    $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);  // Fixed: Double F
-    $pdf->SetFont('montserrat', '', 12);  // Use Montserrat, size 12
+    // Log TCPDF version for debug
+    if ($debug) error_log("TCPDF Version: " . TCPDF_STATIC::getTcpdfVersion());
+    
+    // Try new method (TCPDF 6.2+)
+    if (method_exists($pdf, 'addTTFFont')) {
+        try {
+            $customFont = $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);
+            if ($debug) error_log("Custom font registered via addTTFFont: $customFont");
+        } catch (Exception $e) {
+            if ($debug) error_log("addTTFFont failed: " . $e->getMessage());
+        }
+    }
+    
+    // Fallback to old/deprecated method (pre-6.2)
+    if (!$customFont && method_exists($pdf, 'addTTFfont')) {
+        try {
+            $customFont = $pdf->addTTFfont($fontPath, 'TrueTypeUnicode', '', 32);
+            if ($debug) error_log("Custom font registered via addTTFfont: $customFont");
+        } catch (Exception $e) {
+            if ($debug) error_log("addTTFfont failed: " . $e->getMessage());
+        }
+    }
+    
+    // Set font if successful
+    if ($customFont) {
+        $pdf->SetFont($customFont, '', 12);
+    } else {
+        $pdf->SetFont('helvetica', '', 12);  // Safe fallback
+        if ($debug) error_log("Using Helvetica fallback—no custom font registered");
+    }
 } else {
-    $pdf->SetFont('helvetica', '', 12);  // Fallback
-    if ($debug) error_log("Montserrat font missing: $fontPath");
+    $pdf->SetFont('helvetica', '', 12);  // Safe fallback
+    if ($debug) error_log("Montserrat font file missing: $fontPath");
 }
     $pdf->SetTextColor(0, 0, 0);
 
