@@ -85,6 +85,132 @@
 
   <!-- Google Places Autocomplete API -->
   <script src="https://maps.googleapis.com/maps/api/js?key=<?php echo htmlspecialchars($googleApiKey); ?>&libraries=places&callback=initAutocomplete"></script>
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo htmlspecialchars($googleApiKey); ?>&libraries=places&callback=initAutocomplete"></script>
+
+<script>
+  window.initAutocomplete = function() {
+    // Retry wrapper: Ensure full load
+    let retryCount = 0;
+    const maxRetries = 3;
+    function attemptInit() {
+      if (document.readyState === 'loading') {
+        console.log('DOM loading—waiting for DOMContentLoaded');
+        document.addEventListener('DOMContentLoaded', attemptInit);
+        return;
+      }
+
+      const streetInput = document.getElementById('street_address');
+      
+      if (!streetInput) {
+        console.warn('Street address input not found—retrying...');
+        if (retryCount < maxRetries) {
+          retryCount++;
+          setTimeout(attemptInit, 500);
+          return;
+        }
+        console.error('Street input missing after retries—autocomplete disabled');
+        return;
+      }
+
+      // Type check
+      if (!(streetInput instanceof HTMLInputElement)) {
+        console.error('Street input invalid type:', streetInput);
+        return;
+      }
+
+      if (!window.google || !window.google.maps || !window.google.maps.places) {
+        console.warn(`Google Places not ready (retry ${retryCount + 1}/${maxRetries})`);
+        if (retryCount < maxRetries) {
+          retryCount++;
+          setTimeout(attemptInit, 500);
+          return;
+        }
+        console.error('Google Places failed to load after retries');
+        return;
+      }
+
+      try {
+        console.log('Autocomplete init starting on:', streetInput.id);
+
+        const options = {
+          types: ['address'],
+          componentRestrictions: { country: 'us' }
+        };
+
+        const autocomplete = new window.google.maps.places.Autocomplete(streetInput, options);
+        console.log('Autocomplete created:', autocomplete);
+
+        autocomplete.addListener('place_changed', () => {
+          console.log('Place changed event fired!');
+          try {
+            const place = autocomplete.getPlace();
+
+            if (!place.geometry || !place.address_components) {
+              console.warn('Incomplete place data');
+              return;
+            }
+
+            // Clear other fields
+            const cityEl = document.getElementById('city');
+            const stateEl = document.getElementById('state');
+            const zipEl = document.getElementById('zip');
+            if (cityEl) cityEl.value = '';
+            if (stateEl) stateEl.value = '';
+            if (zipEl) zipEl.value = '';
+
+            let street = '';
+            const components = place.address_components || [];
+
+            components.forEach(component => {
+              const types = component.types;
+              if (types.includes('street_number')) street += component.long_name + ' ';
+              else if (types.includes('route')) street += component.long_name;
+              else if (types.includes('locality') || types.includes('sublocality')) {
+                if (cityEl) cityEl.value = component.long_name;
+              } else if (types.includes('administrative_area_level_1')) {
+                if (stateEl) stateEl.value = component.short_name;
+              } else if (types.includes('postal_code')) {
+                if (zipEl) zipEl.value = component.long_name;
+              }
+            });
+
+            if (place.formatted_address && !street.trim()) {
+              street = place.formatted_address.split(',')[0].trim();
+            }
+            streetInput.value = street;
+
+            // Trigger changes
+            [cityEl, stateEl, zipEl].forEach(el => {
+              if (el && el.value) el.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+
+            console.log('Fields populated:', {
+              street: streetInput.value,
+              city: cityEl?.value,
+              state: stateEl?.value,
+              zip: zipEl?.value
+            });
+          } catch (error) {
+            console.error('Place handler error:', error);
+          }
+        });
+
+        console.log('Google Places Autocomplete fully initialized!');
+      } catch (error) {
+        console.error('Autocomplete creation error:', error);
+        if (retryCount < maxRetries) {
+          retryCount++;
+          setTimeout(attemptInit, 500);
+        }
+      }
+    }
+
+    // Kick off
+    attemptInit();
+  };
+</script>
+
 </head>
 
 <body>
@@ -479,105 +605,6 @@
       }
     });
   </script>
-<script>
-  function initAutocomplete() {
-    // Guard: Ensure DOM is fully loaded
-    if (document.readyState === 'loading') {
-      console.log('DOM loading—deferring autocomplete init');
-      document.addEventListener('DOMContentLoaded', initAutocomplete);
-      return;
-    }
-
-    const streetInput = document.getElementById('street_address');
-    
-    if (!streetInput) {
-      console.warn('Street address input not found—autocomplete disabled. Check form HTML.');
-      return;
-    }
-
-    // Extra type check (fixes InvalidValueError)
-    if (!(streetInput instanceof HTMLInputElement)) {
-      console.error('Street input is not an HTMLInputElement:', streetInput);
-      return;
-    }
-
-    if (!window.google || !window.google.maps || !window.google.maps.places) {
-      console.warn('Google Maps/Places not fully loaded—retrying in 500ms');
-      setTimeout(initAutocomplete, 500);  // Retry once
-      return;
-    }
-
-    try {
-      console.log('Starting autocomplete init on:', streetInput);  // Debug log
-
-      const options = {
-        types: ['address'],
-        componentRestrictions: { country: 'us' }
-      };
-
-      const autocomplete = new google.maps.places.Autocomplete(streetInput, options);
-      console.log('Autocomplete created successfully:', autocomplete);  // Confirm object
-
-      autocomplete.addListener('place_changed', () => {
-        console.log('Place selection triggered!');  // Debug
-        try {
-          const place = autocomplete.getPlace();
-
-          if (!place.geometry || !place.address_components) {
-            console.warn('No place details available');
-            return;
-          }
-
-          // Clear fields first
-          document.getElementById('city').value = '';
-          document.getElementById('state').value = '';
-          document.getElementById('zip').value = '';
-
-          // Extract components
-          let street = '';
-          const components = place.address_components;
-
-          for (let i = 0; i < components.length; i++) {
-            const component = components[i];
-            const types = component.types;
-
-            if (types.includes('street_number')) {
-              street = component.long_name + ' ';
-            } else if (types.includes('route')) {
-              street += component.long_name;
-            } else if (types.includes('locality') || types.includes('sublocality')) {
-              document.getElementById('city').value = component.long_name;
-            } else if (types.includes('administrative_area_level_1')) {
-              document.getElementById('state').value = component.short_name;
-            } else if (types.includes('postal_code')) {
-              document.getElementById('zip').value = component.long_name;
-            }
-          }
-
-          // Set street (fallback if no components)
-          if (place.formatted_address && !street) {
-            street = place.formatted_address.split(',')[0];
-          }
-          streetInput.value = street.trim();
-
-          // Trigger change events for validation
-          ['city', 'state', 'zip'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el && el.value) el.dispatchEvent(new Event('change', { bubbles: true }));
-          });
-
-          console.log('Address populated:', { street, city: place.address_components.find(c => c.types.includes('locality'))?.long_name, state: document.getElementById('state').value, zip: document.getElementById('zip').value });
-        } catch (error) {
-          console.error('Error handling place selection:', error);
-        }
-      });
-
-      console.log('Google Places Autocomplete initialized successfully');
-    } catch (error) {
-      console.error('Error initializing autocomplete:', error);
-    }
-  }
-</script>
 
 </body>
 </html>
