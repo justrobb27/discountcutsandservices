@@ -122,21 +122,59 @@ if (file_exists($pdfTemplate)) {
     $pdf->SetMargins(15, 15, 15);
     $pdf->AddPage();
 
-    // Register Montserrat font (TTF path—adjust if needed)
-    $fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';  // Commit this file to /forms/fonts/
+    // Log version for debug
+    if ($debug) error_log("TCPDF Version: " . TCPDF_STATIC::getTcpdfVersion());
+
+    // Register Montserrat font (safe with fallback)
+    $fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';
+    $customFont = 'helvetica';  // Default fallback
     if (file_exists($fontPath)) {
-        $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);  // Register once
-        $pdf->SetFont('montserrat', '', 12);  // Use Montserrat, size 12
+        // Try new method (6.x+)
+        if (method_exists($pdf, 'addTTFFont')) {
+            try {
+                $customFont = $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);
+                $pdf->SetFont($customFont, '', 12);
+                if ($debug) error_log("Custom font registered: $customFont");
+            } catch (Exception $e) {
+                if ($debug) error_log("addTTFFont failed: " . $e->getMessage());
+                $pdf->SetFont('helvetica', '', 12);
+            }
+        } 
+        // Try old method (5.x)
+        elseif (method_exists($pdf, 'addTTFfont')) {
+            try {
+                $customFont = $pdf->addTTFfont($fontPath, 'TrueTypeUnicode', '', 32);
+                $pdf->SetFont($customFont, '', 12);
+                if ($debug) error_log("Custom font registered (old): $customFont");
+            } catch (Exception $e) {
+                if ($debug) error_log("addTTFfont failed: " . $e->getMessage());
+                $pdf->SetFont('helvetica', '', 12);
+            }
+        } else {
+            $pdf->SetFont('helvetica', '', 12);
+            if ($debug) error_log("No font method available—using Helvetica");
+        }
     } else {
-        $pdf->SetFont('helvetica', '', 12);  // Fallback
-        if ($debug) error_log("Montserrat font missing: $fontPath");
+        $pdf->SetFont('helvetica', '', 12);
+        if ($debug) error_log("Montserrat font missing: $fontPath—using Helvetica");
     }
     $pdf->SetTextColor(0, 0, 0);
 
-    // Import template page (your PDF)
-    $pdf->setSourceFile($pdfTemplate);
-    $tplId = $pdf->importPage(1);
-    $pdf->useTemplate($tplId, 0, 0, 210);  // Full A4 overlay (210mm width)
+    // Import template page (your PDF) - Safe import
+    try {
+        $pdf->setSourceFile($pdfTemplate);
+        $tplId = $pdf->importPage(1);
+        if ($tplId) {
+            $pdf->useTemplate($tplId, 0, 0, 210);  // Full A4 overlay
+            if ($debug) error_log("Template imported: TplID $tplId");
+        } else {
+            throw new Exception("Import page failed");
+        }
+    } catch (Exception $e) {
+        if ($debug) error_log("Template import error: " . $e->getMessage());
+        // Fallback: Plain page
+        $pdf->AddPage();
+    }
 
     // Overlay fields at template coords (mm from top/left; measured from your PDF)
     // Personal info (top, y=30-60)
