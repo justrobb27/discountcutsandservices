@@ -119,7 +119,7 @@ $pdfFile = null;
 $pdfAttached = false;
 if (file_exists($pdfTemplate)) {
     require_once __DIR__ . '/../vendor/tecnickcom/tcpdf/tcpdf.php';
-    $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+    $pdf = new Fpdi();
     $pdf->SetCreator('Discount Cuts');
     $pdf->SetAuthor($full_name);
     $pdf->SetTitle('Filled Application: ' . $full_name);
