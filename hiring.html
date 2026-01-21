@@ -14,6 +14,9 @@
     window.TURNSTILE_SITE_KEY = '<?php echo htmlspecialchars($turnstileSiteKey); ?>';
     window.GOOGLE_API_KEY = '<?php echo htmlspecialchars($googleApiKey); ?>';
   </script>
+
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=<?php echo htmlspecialchars($googleApiKey); ?>&libraries=places&callback=initAutocomplete">
+  </script>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
