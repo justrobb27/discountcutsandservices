@@ -1,11 +1,14 @@
 <?php
-require_once __DIR__ . '/../vendor/tecnickcom/tcpdf/tcpdf.php';
-require_once __DIR__ . '/../vendor/setasign/fpdi/src/Fpdi.php';  // Manual FPDI load (fixes class not found)
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
+
+require_once __DIR__ . '/../vendor/tecnickcom/tcpdf/tcpdf.php';
+require_once __DIR__ . '/../vendor/setasign/fpdi/src/autoload.php';
+use setasign\Fpdi\Tcpdf\Fpdi;
 
 // Load .env from root (one level up from /forms/)
 $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
@@ -79,10 +82,6 @@ $apt_suite = trim(filter_var($_POST['apt_suite'] ?? '', FILTER_SANITIZE_STRING))
 $full_address = !empty($apt_suite) ? $street_address . ', ' . $apt_suite : $street_address;
 $full_address .= !empty($city) || !empty($state) || !empty($zip) ? ', ' . implode(', ', array_filter([$city, $state, $zip])) : '';
 
-// Combined for template (2 lines: street/apt, city/state/zip)
-$street_line = $street_address . (!empty($apt_suite) ? ', ' . $apt_suite : '');
-$city_line = $city . (!empty($city) ? ', ' : '') . $state . (!empty($zip) ? ' ' . $zip : '');
-
 $years_experience = (float) ($_POST['years_experience'] ?? 0);
 $desired_pay = (float) ($_POST['desired_pay'] ?? 0);
 $drivers_license = !empty($_POST['drivers_license'] ?? '');
@@ -101,10 +100,10 @@ if (empty($street_address)) $errors[] = 'street_address';
 if (empty($city)) $errors[] = 'city';
 if (empty($state)) $errors[] = 'state';
 if (empty($zip) || !preg_match('/^\d{5}(-\d{4})?$/', $zip)) $errors[] = 'zip';
-if (!empty($apt_suite) && strlen($apt_suite) > 100) $errors[] = 'apt_suite';
+if (!empty($apt_suite) && strlen($apt_suite) > 100) $errors[] = 'apt_suite';  // Optional: Cap length
 if ($years_experience < 0) $errors[] = 'years_experience';
 if ($desired_pay < 0) $errors[] = 'desired_pay';
-if (strlen($cover_letter) < 20) $errors[] = 'cover_letter';
+if (strlen($cover_letter) < 20) $errors[] = 'cover_letter';  // Relaxed min length
 if (!$agreement) $errors[] = 'agreement';
 if (empty($application_date) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $application_date)) $errors[] = 'application_date';
 if (empty($printed_name) || $printed_name !== $full_name) $errors[] = 'printed_name';
@@ -119,7 +118,8 @@ $pdfGenerated = false;
 $pdfFile = null;
 $pdfAttached = false;
 if (file_exists($pdfTemplate)) {
-    $pdf = new Fpdi();  // FPDI extends TCPDF for import
+    require_once __DIR__ . '/../vendor/tecnickcom/tcpdf/tcpdf.php';
+    $pdf = new Fpdi();
     $pdf->SetCreator('Discount Cuts');
     $pdf->SetAuthor($full_name);
     $pdf->SetTitle('Filled Application: ' . $full_name);
@@ -127,78 +127,87 @@ if (file_exists($pdfTemplate)) {
     $pdf->AddPage();
 
     // Log version for debug
-    if ($debug) error_log("TCPDF/FPDI Version: " . $pdf->getTcpdfVersion());
+    if ($debug) error_log("TCPDF Version: " . TCPDF_STATIC::getTcpdfVersion());
 
     // Register Montserrat font (safe with fallback)
     $fontPath = __DIR__ . '/fonts/Montserrat-Regular.ttf';
+    $customFont = 'helvetica';  // Default fallback
     if (file_exists($fontPath)) {
-        // Try addTTFFont (6.x+)
+        // Try new method (6.x+)
         if (method_exists($pdf, 'addTTFFont')) {
             try {
-                $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);
-                $pdf->SetFont('montserrat', '', 12);
-                if ($debug) error_log("Custom font registered (TTFFont)");
+                $customFont = $pdf->addTTFFont($fontPath, 'TrueTypeUnicode', '', 32);
+                $pdf->SetFont($customFont, '', 12);
+                if ($debug) error_log("Custom font registered: $customFont");
             } catch (Exception $e) {
                 if ($debug) error_log("addTTFFont failed: " . $e->getMessage());
                 $pdf->SetFont('helvetica', '', 12);
             }
         } 
-        // Try addTTFfont (5.x)
+        // Try old method (5.x)
         elseif (method_exists($pdf, 'addTTFfont')) {
             try {
-                $pdf->addTTFfont($fontPath, 'TrueTypeUnicode', '', 32);
-                $pdf->SetFont('montserrat', '', 12);
-                if ($debug) error_log("Custom font registered (TTFfont)");
+                $customFont = $pdf->addTTFfont($fontPath, 'TrueTypeUnicode', '', 32);
+                $pdf->SetFont($customFont, '', 12);
+                if ($debug) error_log("Custom font registered (old): $customFont");
             } catch (Exception $e) {
                 if ($debug) error_log("addTTFfont failed: " . $e->getMessage());
                 $pdf->SetFont('helvetica', '', 12);
             }
         } else {
             $pdf->SetFont('helvetica', '', 12);
-            if ($debug) error_log("No font method—using Helvetica");
+            if ($debug) error_log("No font method available—using Helvetica");
         }
     } else {
         $pdf->SetFont('helvetica', '', 12);
-        if ($debug) error_log("Montserrat missing—using Helvetica");
+        if ($debug) error_log("Montserrat font missing: $fontPath—using Helvetica");
     }
     $pdf->SetTextColor(0, 0, 0);
 
-    // Import template page (FPDI handles this)
+    // Import template page (your PDF) - Safe import
     try {
-        $tplId = $pdf->setSourceFile($pdfTemplate);
-        $pageId = $pdf->importPage(1);
-        $pdf->useTemplate($pageId, 0, 0, 210);  // Full A4 overlay
-        if ($debug) error_log("Template imported: PageID $pageId");
+        $pdf->setSourceFile($pdfTemplate);
+        $tplId = $pdf->importPage(1);
+        if ($tplId) {
+            $pdf->useTemplate($tplId, 0, 0, 210);  // Full A4 overlay
+            if ($debug) error_log("Template imported: TplID $tplId");
+        } else {
+            throw new Exception("Import page failed");
+        }
     } catch (Exception $e) {
         if ($debug) error_log("Template import error: " . $e->getMessage());
-        $pdf->AddPage();  // Plain fallback
+        // Fallback: Plain page
+        $pdf->AddPage();
     }
 
-    // Overlay fields at template coords (refined for your screenshot—no spill)
-    // Personal info (top, y=25-45)
-    $pdf->SetXY(45, 25); $pdf->Cell(105, 6, $full_name, 0, 1, 'L');  // Full Name
-    $pdf->SetXY(45, 35); $pdf->Cell(105, 6, $email, 0, 1, 'L');  // Email
-    $pdf->SetXY(45, 45); $pdf->Cell(105, 6, $phone, 0, 1, 'L');  // Phone
+    // Overlay fields at template coords (mm from top/left; measured from your PDF)
+    // Personal info (top, y=30-60)
+    $pdf->SetXY(50, 30); $pdf->Cell(100, 5, $full_name, 0, 1, 'L');  // Full Name
+    $pdf->SetXY(50, 40); $pdf->Cell(100, 5, $email, 0, 1, 'L');  // Email
+    $pdf->SetXY(50, 50); $pdf->Cell(100, 5, $phone, 0, 1, 'L');  // Phone
+    $pdf->SetXY(50, 60); $pdf->MultiCell(100, 5, $street_address, 0, 'L');  // Street Address
 
-    // Address lines (street/apt combined y=55, city/state/zip combined y=65—short street cell)
-    $pdf->SetXY(45, 55); $pdf->Cell(95, 6, $street_line, 0, 1, 'L');  // Street + Apt (shorter to avoid spill)
-    $pdf->SetXY(45, 65); $pdf->Cell(105, 6, $city_line, 0, 1, 'L');  // City, State ZIP combined
+    // Address continuation (adjust y/x to match template)
+    $pdf->SetXY(50, 65); $pdf->Cell(100, 5, $apt_suite, 0, 1, 'L');  // Apt/Suite
+    $pdf->SetXY(50, 70); $pdf->Cell(50, 5, $city, 0, 0, 'L');       // City
+    $pdf->SetXY(110, 70); $pdf->Cell(20, 5, $state, 0, 1, 'L');     // State
+    $pdf->SetXY(140, 70); $pdf->Cell(30, 5, $zip, 0, 1, 'L');       // ZIP
 
-    // Green row (y=75-85, centered)
-    $pdf->SetXY(45, 75); $pdf->Cell(45, 6, $years_experience, 0, 0, 'L');  // Years
-    $pdf->SetXY(95, 75); $pdf->Cell(65, 6, '$' . number_format($desired_pay, 2), 0, 1, 'L');  // Pay
-    if ($drivers_license) { $pdf->SetXY(45, 85); $pdf->Cell(12, 8, '[X]', 1, 0, 'C'); }  // License [X] bolder
-    if ($reliable_transport) { $pdf->SetXY(100, 85); $pdf->Cell(12, 8, '[X]', 1, 0, 'C'); }  // Transport [X]
+    // Green row (mid, y=80-100)
+    $pdf->SetXY(50, 80); $pdf->Cell(50, 5, $years_experience, 0, 0, 'L');  // Years Experience
+    $pdf->SetXY(120, 80); $pdf->Cell(50, 5, '$' . number_format($desired_pay, 2), 0, 1, 'L');  // Desired Pay
+    if ($drivers_license) { $pdf->SetXY(50, 90); $pdf->Cell(10, 5, '[X]', 1, 0, 'C'); }  // License checkbox
+    if ($reliable_transport) { $pdf->SetXY(120, 90); $pdf->Cell(10, 5, '[X]', 1, 0, 'C'); }  // Transport checkbox
 
-    // Cover Letter (y=95-140, taller for wrap—no garble)
-    $pdf->SetXY(45, 95); $pdf->MultiCell(140, 45, $cover_letter, 1, 'L', false, 0);  // Height 45mm
+    // Cover Letter (large box, y=110-140, wrapped)
+    $pdf->SetXY(50, 110); $pdf->MultiCell(140, 30, $cover_letter, 1, 'L', false, 0);  // Box height 30mm
 
-    // Agreement/Date (y=145-155)
-    if ($agreement) { $pdf->SetXY(45, 145); $pdf->Cell(12, 8, '[X]', 1, 0, 'C'); }  // Agreement [X]
-    $pdf->SetXY(65, 145); $pdf->Cell(50, 6, $application_date, 0, 1, 'L');  // Date
+    // Agreement/Date (bottom, y=160-170)
+    if ($agreement) { $pdf->SetXY(50, 160); $pdf->Cell(10, 5, '[X]', 1, 0, 'C'); }  // Agreement checkbox
+    $pdf->SetXY(70, 160); $pdf->Cell(50, 5, $application_date, 0, 1, 'L');  // Date
 
-    // Signature (y=155)
-    $pdf->SetXY(45, 155); $pdf->Cell(105, 6, $printed_name, 0, 1, 'L');  // Printed Name
+    // Signature (bottom, y=175-185)
+    $pdf->SetXY(50, 175); $pdf->Cell(100, 5, $printed_name, 0, 1, 'L');  // Printed Name (as signature)
 
     // Output to file
     $outputDir = __DIR__ . '/output';
