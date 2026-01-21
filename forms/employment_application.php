@@ -67,7 +67,17 @@ if (!$turnstileValid) {
 $full_name = trim($_POST['full_name'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $phone = trim($_POST['phone'] ?? '');
-$street_address = trim($_POST['street_address'] ?? '');
+// Sanitize new fields
+$street_address = trim(filter_var($_POST['street_address'] ?? '', FILTER_SANITIZE_STRING));
+$city = trim(filter_var($_POST['city'] ?? '', FILTER_SANITIZE_STRING));
+$state = trim(filter_var($_POST['state'] ?? '', FILTER_SANITIZE_STRING));
+$zip = trim(filter_var($_POST['zip'] ?? '', FILTER_SANITIZE_STRING));
+$apt_suite = trim(filter_var($_POST['apt_suite'] ?? '', FILTER_SANITIZE_STRING));
+
+// Full address for email
+$full_address = !empty($apt_suite) ? $street_address . ', ' . $apt_suite : $street_address;
+$full_address .= !empty($city) || !empty($state) || !empty($zip) ? ', ' . implode(', ', array_filter([$city, $state, $zip])) : '';
+
 $years_experience = (float) ($_POST['years_experience'] ?? 0);
 $desired_pay = (float) ($_POST['desired_pay'] ?? 0);
 $drivers_license = !empty($_POST['drivers_license'] ?? '');
@@ -81,11 +91,15 @@ $printed_name = trim($_POST['printed_name'] ?? '');
 $errors = [];
 if (empty($full_name) || strlen($full_name) < 2) $errors[] = 'full_name';
 if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = 'email';
-if (!empty($phone) && !preg_match('/^\d{3}-\d{3}-\d{4}$/', $phone)) $errors[] = 'phone';
+if (empty($phone) || !preg_match('/^\d{3}-\d{3}-\d{4}$/', $phone)) $errors[] = 'phone';
 if (empty($street_address)) $errors[] = 'street_address';
+if (empty($city)) $errors[] = 'city';
+if (empty($state)) $errors[] = 'state';
+if (empty($zip) || !preg_match('/^\d{5}(-\d{4})?$/', $zip)) $errors[] = 'zip';
+if (!empty($apt_suite) && strlen($apt_suite) > 100) $errors[] = 'apt_suite';  // Optional: Cap length
 if ($years_experience < 0) $errors[] = 'years_experience';
 if ($desired_pay < 0) $errors[] = 'desired_pay';
-if (strlen($cover_letter) < 50) $errors[] = 'cover_letter';
+if (strlen($cover_letter) < 20) $errors[] = 'cover_letter';  // Relaxed min length
 if (!$agreement) $errors[] = 'agreement';
 if (empty($application_date) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $application_date)) $errors[] = 'application_date';
 if (empty($printed_name) || $printed_name !== $full_name) $errors[] = 'printed_name';
@@ -95,49 +109,10 @@ if (!empty($errors)) {
     exit;
 }
 
-// Send email (table mirroring PDF layout)
-$mail = new PHPMailer(true);
-$emailSent = false;
-try {
-    $mail->isSMTP();
-    $mail->Host = $smtpHost;
-    $mail->SMTPAuth = true;
-    $mail->Username = $smtpUser;
-    $mail->Password = $smtpPass;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = $smtpPort;
-
-    $mail->setFrom($fromEmail, $fromName);
-    $mail->addAddress($adminEmail);
-
-    $mail->isHTML(true);
-    $mail->Subject = 'New Employment Application: ' . $full_name;
-    $mail->Body = '
-        <h2>Employment Application - Discount Cuts & Services</h2>
-        <table border="1" cellpadding="5" style="width:100%; border-collapse: collapse;">
-            <tr><td><strong>Full Name:</strong></td><td>' . htmlspecialchars($full_name) . '</td></tr>
-            <tr><td><strong>Email:</strong></td><td>' . htmlspecialchars($email) . '</td></tr>
-            <tr><td><strong>Phone:</strong></td><td>' . htmlspecialchars($phone) . '</td></tr>
-            <tr><td><strong>Street Address:</strong></td><td>' . nl2br(htmlspecialchars($street_address)) . '</td></tr>
-            <tr><td><strong>Years of Relevant Experience:</strong></td><td>' . $years_experience . '</td></tr>
-            <tr><td><strong>Desired Pay:</strong></td><td>$' . number_format($desired_pay, 2) . '</td></tr>
-            <tr><td><strong>Valid Driver\'s License:</strong></td><td>' . ($drivers_license ? 'Yes [X]' : 'No') . '</td></tr>
-            <tr><td><strong>Reliable Transportation:</strong></td><td>' . ($reliable_transport ? 'Yes [X]' : 'No') . '</td></tr>
-            <tr><td><strong>Cover Letter:</strong></td><td>' . nl2br(htmlspecialchars($cover_letter)) . '</td></tr>
-            <tr><td><strong>Agreement:</strong></td><td>' . ($agreement ? 'Yes [X]' : 'No') . '</td></tr>
-            <tr><td><strong>Date:</strong></td><td>' . $application_date . '</td></tr>
-            <tr><td><strong>Printed Name (Signature):</strong></td><td>' . htmlspecialchars($printed_name) . '</td></tr>
-        </table>
-        <p><em>Full PDF attached below if generated.</em></p>
-    ';
-    $mail->send();
-    $emailSent = true;
-} catch (Exception $e) {
-    if ($debug) error_log("PHPMailer Error: {$mail->ErrorInfo}");
-}
-
-// Fill PDF (overlay on your template with Montserrat 12pt)
+// Fill PDF (overlay on your template with Montserrat 12pt) - Generate BEFORE email
 $pdfGenerated = false;
+$pdfFile = null;
+$pdfAttached = false;
 if (file_exists($pdfTemplate)) {
     require_once __DIR__ . '/../vendor/tecnickcom/tcpdf/tcpdf.php';
     $pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -170,6 +145,12 @@ if (file_exists($pdfTemplate)) {
     $pdf->SetXY(50, 50); $pdf->Cell(100, 5, $phone, 0, 1, 'L');  // Phone
     $pdf->SetXY(50, 60); $pdf->MultiCell(100, 5, $street_address, 0, 'L');  // Street Address
 
+    // Address continuation (adjust y/x to match template)
+    $pdf->SetXY(50, 65); $pdf->Cell(100, 5, $apt_suite, 0, 1, 'L');  // Apt/Suite
+    $pdf->SetXY(50, 70); $pdf->Cell(50, 5, $city, 0, 0, 'L');       // City
+    $pdf->SetXY(110, 70); $pdf->Cell(20, 5, $state, 0, 1, 'L');     // State
+    $pdf->SetXY(140, 70); $pdf->Cell(30, 5, $zip, 0, 1, 'L');       // ZIP
+
     // Green row (mid, y=80-100)
     $pdf->SetXY(50, 80); $pdf->Cell(50, 5, $years_experience, 0, 0, 'L');  // Years Experience
     $pdf->SetXY(120, 80); $pdf->Cell(50, 5, '$' . number_format($desired_pay, 2), 0, 1, 'L');  // Desired Pay
@@ -193,13 +174,67 @@ if (file_exists($pdfTemplate)) {
     $pdf->Output($pdfFile, 'F');
     $pdfGenerated = true;
 
-    // Attach to email if sent
-    if ($emailSent) {
-        $mail->addAttachment($pdfFile);
-        $mail->send();  // Resend with PDF
-    }
+    if ($debug) error_log("PDF generated: $pdfFile");
 } else {
     if ($debug) error_log("PDF template missing: $pdfTemplate");
+}
+
+// Send email (table mirroring PDF layout)
+$mail = new PHPMailer(true);
+$emailSent = false;
+try {
+    $mail->isSMTP();
+    $mail->Host = $smtpHost;
+    $mail->SMTPAuth = true;
+    $mail->Username = $smtpUser;
+    $mail->Password = $smtpPass;
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port = $smtpPort;
+
+    $mail->setFrom($fromEmail, $fromName);
+    $mail->addAddress($adminEmail);
+
+    $mail->isHTML(true);
+    $mail->Subject = 'New Employment Application: ' . $full_name;
+
+    // Attach PDF if generated
+    if ($pdfGenerated && file_exists($pdfFile)) {
+        $mail->addAttachment($pdfFile);
+        $pdfAttached = true;
+    }
+
+    $mail->Body = '
+        <h2>Employment Application - Discount Cuts & Services</h2>
+        <table border="1" cellpadding="5" style="width:100%; border-collapse: collapse;">
+            <tr><td><strong>Full Name:</strong></td><td>' . htmlspecialchars($full_name) . '</td></tr>
+            <tr><td><strong>Email:</strong></td><td>' . htmlspecialchars($email) . '</td></tr>
+            <tr><td><strong>Phone:</strong></td><td>' . htmlspecialchars($phone) . '</td></tr>
+            <tr><td><strong>Street Address:</strong></td><td>' . nl2br(htmlspecialchars($street_address)) . '</td></tr>
+            <tr><td><strong>Apt/Suite:</strong></td><td>' . htmlspecialchars($apt_suite) . '</td></tr>
+            <tr><td><strong>City:</strong></td><td>' . htmlspecialchars($city) . '</td></tr>
+            <tr><td><strong>State:</strong></td><td>' . htmlspecialchars($state) . '</td></tr>
+            <tr><td><strong>ZIP Code:</strong></td><td>' . htmlspecialchars($zip) . '</td></tr>
+            <tr><td><strong>Full Address:</strong></td><td>' . nl2br(htmlspecialchars($full_address)) . '</td></tr>
+            <tr><td><strong>Years of Relevant Experience:</strong></td><td>' . $years_experience . '</td></tr>
+            <tr><td><strong>Desired Pay:</strong></td><td>$' . number_format($desired_pay, 2) . '</td></tr>
+            <tr><td><strong>Valid Driver\'s License:</strong></td><td>' . ($drivers_license ? 'Yes [X]' : 'No') . '</td></tr>
+            <tr><td><strong>Reliable Transportation:</strong></td><td>' . ($reliable_transport ? 'Yes [X]' : 'No') . '</td></tr>
+            <tr><td><strong>Cover Letter:</strong></td><td>' . nl2br(htmlspecialchars($cover_letter)) . '</td></tr>
+            <tr><td><strong>Agreement:</strong></td><td>' . ($agreement ? 'Yes [X]' : 'No') . '</td></tr>
+            <tr><td><strong>Date:</strong></td><td>' . $application_date . '</td></tr>
+            <tr><td><strong>Printed Name (Signature):</strong></td><td>' . htmlspecialchars($printed_name) . '</td></tr>
+        </table>
+        <p><em>Full PDF attached below if generated.</em></p>
+    ';
+    $mail->send();
+    $emailSent = true;
+} catch (Exception $e) {
+    if ($debug) error_log("PHPMailer Error: {$mail->ErrorInfo}");
+}
+
+// Clean up PDF file if attached (for security)
+if ($pdfAttached && file_exists($pdfFile)) {
+    unlink($pdfFile);
 }
 
 // Success redirect (with alert in hiring.html JS)
