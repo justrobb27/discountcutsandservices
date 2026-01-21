@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/tecnickcom/tcpdf/tcpdf.php';
-require_once __DIR__ . '/../vendor/setasign/fpdi/src/Fpdi.php';  // Manual FPDI load
+require_once __DIR__ . '/../vendor/setasign/fpdi/src/Fpdi.php';  // Manual FPDI load (fixes class not found)
 
 use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
@@ -174,23 +174,23 @@ if (file_exists($pdfTemplate)) {
         $pdf->AddPage();  // Plain fallback
     }
 
-    // Overlay fields at template coords (refined for your screenshot—street line y=55, city y=65)
+    // Overlay fields at template coords (refined for your screenshot—no spill)
     // Personal info (top, y=25-45)
     $pdf->SetXY(45, 25); $pdf->Cell(105, 6, $full_name, 0, 1, 'L');  // Full Name
     $pdf->SetXY(45, 35); $pdf->Cell(105, 6, $email, 0, 1, 'L');  // Email
     $pdf->SetXY(45, 45); $pdf->Cell(105, 6, $phone, 0, 1, 'L');  // Phone
 
-    // Address lines (street/apt combined y=55, city/state/zip combined y=65)
-    $pdf->SetXY(45, 55); $pdf->Cell(105, 6, $street_line, 0, 1, 'L');  // Street + Apt (no spill)
+    // Address lines (street/apt combined y=55, city/state/zip combined y=65—short street cell)
+    $pdf->SetXY(45, 55); $pdf->Cell(95, 6, $street_line, 0, 1, 'L');  // Street + Apt (shorter to avoid spill)
     $pdf->SetXY(45, 65); $pdf->Cell(105, 6, $city_line, 0, 1, 'L');  // City, State ZIP combined
 
-    // Green row (y=75-85)
+    // Green row (y=75-85, centered)
     $pdf->SetXY(45, 75); $pdf->Cell(45, 6, $years_experience, 0, 0, 'L');  // Years
     $pdf->SetXY(95, 75); $pdf->Cell(65, 6, '$' . number_format($desired_pay, 2), 0, 1, 'L');  // Pay
-    if ($drivers_license) { $pdf->SetXY(45, 85); $pdf->Cell(12, 8, '[X]', 1, 0, 'C'); }  // License [X]
+    if ($drivers_license) { $pdf->SetXY(45, 85); $pdf->Cell(12, 8, '[X]', 1, 0, 'C'); }  // License [X] bolder
     if ($reliable_transport) { $pdf->SetXY(100, 85); $pdf->Cell(12, 8, '[X]', 1, 0, 'C'); }  // Transport [X]
 
-    // Cover Letter (y=95-140, taller for wrap)
+    // Cover Letter (y=95-140, taller for wrap—no garble)
     $pdf->SetXY(45, 95); $pdf->MultiCell(140, 45, $cover_letter, 1, 'L', false, 0);  // Height 45mm
 
     // Agreement/Date (y=145-155)
