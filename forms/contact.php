@@ -6,28 +6,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $turnstile_secret = $config['turnstile_secret'] ?? '';
     $turnstile_response = $_POST['cf-turnstile-response'] ?? '';
 
+    if (empty($turnstile_response)) {
+        echo json_encode(['status' => 'error', 'message' => 'Spam protection failed. Token missing.']);
+        exit;
+    }
+
     $turnstile_verify_url = 'https://challenges.cloudflare.com/turnstile/v0/siteverify';
-    $turnstile_data = [
-        'secret' => $turnstile_secret,
+
+    $ch = curl_init($turnstile_verify_url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query([
+        'secret'   => $turnstile_secret,
         'response' => $turnstile_response,
         'remoteip' => $_SERVER['REMOTE_ADDR'] ?? ''
-    ];
+    ]));
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 10); // Prevent hangs
 
-    $options = [
-        'http' => [
-            'header' => "Content-type: application/x-www-form-urlencoded\r\n",
-            'method' => 'POST',
-            'content' => http_build_query($turnstile_data)
-        ]
-    ];
-    $context = stream_context_create($options);
-    $turnstile_result = file_get_contents($turnstile_verify_url, false, $context);
-    $turnstile_result = json_decode($turnstile_result, true);
+    $turnstile_result_raw = curl_exec($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $curl_error = curl_error($ch);
+    curl_close($ch);
 
-    if (!$turnstile_result['success']) {
+    if ($turnstile_result_raw === false || $http_code !== 200) {
+        // Log for debugging (check your server's error log)
+        error_log("Turnstile cURL failed: HTTP $http_code - $curl_error");
+        echo json_encode(['status' => 'error', 'message' => 'Spam protection failed. Server connection issue.']);
+        exit;
+    }
+
+    $turnstile_result = json_decode($turnstile_result_raw, true);
+
+    if (!$turnstile_result || !$turnstile_result['success']) {
+        // Log the actual error codes for debugging
+        $error_codes = $turnstile_result['error-codes'] ?? ['unknown'];
+        error_log("Turnstile failed: " . implode(', ', $error_codes));
+        
+        // You can customize messages based on codes if you want
         echo json_encode(['status' => 'error', 'message' => 'Spam protection failed. Please try again.']);
         exit;
     }
+
+    // If here, Turnstile passed → continue to sanitize & send email
 }
 
 // Step 2: Sanitize inputs
